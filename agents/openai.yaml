@@ -1,0 +1,4 @@
+interface:
+  display_name: "fengfeng漫剧"
+  short_description: "融合剧本创作、文武戏设计与九宫格工作台，输出连续描述视频提示词"
+  default_prompt: "使用 $fengfeng-manju 将我的剧本规划为九宫格分镜，检查成图并输出视频提示词。"

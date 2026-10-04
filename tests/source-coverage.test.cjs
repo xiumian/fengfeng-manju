@@ -1,0 +1,7 @@
+const test=require('node:test'),a=require('node:assert/strict'),C=require('../assets/workbench/core.js'),P=require('../scripts/production.cjs');
+const make=()=>C.parseScript('——[0—3秒]：【看信】\n甲低头看信。\n动态元素：低头。\n【音效】纸响。','覆盖');
+const ledger=p=>{p.source_units=[{id:'U001',text:'甲看信'},{id:'U002',text:'乙藏钥匙'}];p.segments[0].panels.forEach(x=>x.source_ids=['U001']);return p;};
+test('未覆盖单元草稿告警但允许恢复编辑，完成稿阻断',()=>{const p=ledger(make());a(C.validate(p).warnings.some(x=>x.includes('U002')));a.doesNotThrow(()=>C.restore(JSON.stringify(p)));const b=p.segments[0];b.completed=b.image_reviewed=b.mapping_confirmed=true;b.image_data_url='data:image/png;base64,test';a(C.validate(p).errors.some(x=>x.includes('U002')));a.throws(()=>C.reviewedResults(p),/U002/);});
+test('单元全部覆盖及默认事件来源仍有效',()=>{const p=ledger(make());p.segments[0].panels[8].source_ids=['U002'];a(!C.validate(p).warnings.some(x=>x.includes('剧情单元')));a(C.validate(make()).valid);});
+test('悬空来源告警或阻断，重复或非法单元结构拒绝导入',()=>{const p=ledger(make());p.segments[0].panels[0].source_ids=['U404'];a(C.validate(p).warnings.some(x=>x.includes('U404')));for(const units of [[null],[{id:''}],[{id:'U1'},{id:'U1'}]]){const q=make();q.source_units=units;a.throws(()=>C.restore(JSON.stringify(q)),/source_units/);}});
+test('角色请求包含源标准资产卡四区、细节与色表',()=>{const p=make();const out=P.plan(p,{entities:[{id:'A',kind:'character',name:'甲',description:'青衣',asset_card_template:'legacy'}]});const s=out.asset_requests[0].prompt;for(const k of ['面部特写','无头','正面','侧面','背面','材质细节','HEX','未指定'])a(s.includes(k),k);});

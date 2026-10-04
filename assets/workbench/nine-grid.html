@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:,">
+    <title>fengfeng漫剧</title>
+    <link rel="stylesheet" href="./nine-grid.css?v=6" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div><h1>fengfeng漫剧</h1><p>剧本、事件时间轴、九格检查与连续描述视频提示词；自动规划是待核对初稿。</p></div>
+      <div class="top-actions">
+        <label class="button primary">导入剧本<input id="scriptFileInput" type="file" accept="text/plain,text/markdown,.txt,.md" /></label>
+        <button id="copySegmentPrompt" class="button">复制当前SEG生图Prompt</button>
+        <label class="button">回填九宫格图<input id="imageInput" type="file" accept="image/png,image/jpeg,image/webp" /></label>
+        <label class="button">导入工作项目JSON<input id="packageInput" type="file" accept="application/json,.json" /></label>
+        <button id="saveProject" class="button">保存项目JSON</button>
+      </div>
+    </header>
+    <main>
+      <section class="pipeline" aria-label="自动工作流状态">
+        <span data-stage="script">1 剧本</span><span data-stage="breakdown">2 拆段</span><span data-stage="prompt">3 Prompt</span><span data-stage="image">4 九宫格</span><span data-stage="review">5 检视</span><span data-stage="package">6 结果输出</span>
+        <b id="pipelineStatus">可直接导入TXT或Markdown剧本</b>
+      </section>
+
+      <details class="script-paste"><summary>也可以直接粘贴剧本</summary><textarea id="scriptTextInput" placeholder="粘贴剧本、镜头表或带【镜头A】结构的生成提示词"></textarea><button id="parseScriptButton" class="primary">自动拆解并生成九格Prompt</button></details>
+
+      <section class="segment-bar" aria-label="段落导航">
+        <button id="previousSegment">上一段</button>
+        <label>SEG<select id="segmentSelect"></select></label>
+        <button id="nextSegment">下一段</button>
+        <span id="segmentProgress">1 / 1</span>
+        <button id="toggleComplete" class="primary">确认图片并标记完成</button>
+      </section>
+
+      <section class="summary" aria-label="当前九宫格摘要">
+        <span><b>剧本</b><em id="scriptName">内置测试</em></span>
+        <span><b>当前段落</b><em id="segmentId">SEG01</em></span>
+        <span><b>当前格</b><em id="currentPanel">SEG01-P01</em></span>
+        <span><b>段落时长</b><em id="totalDuration">15.00s</em></span>
+        <span><b>完成状态</b><em id="completionState">检视中</em></span>
+      </section>
+
+      <section class="segment-prompt prompt-box"><div class="prompt-heading"><b>当前SEG九宫格生成Prompt（仅中间校验，不进入最终包）</b><span id="generationState">Prompt已准备</span></div><pre id="segmentPrompt"></pre></section>
+      <section class="video-prompt prompt-box"><div class="prompt-heading"><b>当前SEG最终视频生成Prompt（确认完成后生成）</b><button id="copyVideoPrompt" disabled>复制视频Prompt</button></div><pre id="videoPrompt">本段仍在9宫调试；标记完成后才转换为视频生成Prompt。</pre></section>
+
+      <section class="prompt-box"><h2>项目设置与全局定义</h2><button id="newProject">新建空项目</button><label>可选SEG上限（秒；0表示不强制拆段）<input id="segmentSeconds" type="number" min="0" value="0"></label><label><input id="timingConfirmed" type="checkbox">已核对并确认事件时间</label><label>分镜图独立画风（留空=黑白灰粗铅笔，彩色仅制作标注）<textarea id="storyboardStyleInput"></textarea></label><label>全局基调<textarea id="global_tone"></textarea></label><label>特效基底<textarea id="global_vfx"></textarea></label><label>位移环境交互<textarea id="global_motion"></textarea></label><label>负面约束<textarea id="global_negatives"></textarea></label><label>场景定义<textarea id="global_scenes"></textarea></label><label>人物主体定义<textarea id="global_characters"></textarea></label><label>武器道具定义<textarea id="global_props"></textarea></label><button id="saveGlobals">保存全局设定并使相关审核失效</button></section><section class="prompt-box"><h2>完整事件时间轴（九格不截断事件）</h2><select id="eventSelect"></select><label>事件标题<textarea id="event_title"></textarea></label><label>开始秒<textarea id="event_start"></textarea></label><label>结束秒<textarea id="event_end"></textarea></label><label>连续画面正文<textarea id="event_body"></textarea></label><label>动态摘要<textarea id="event_dynamic"></textarea></label><label>本节点音效<textarea id="event_sound"></textarea></label><label>台词JSON：start、end、text、after_body_line（在正文第几行后插入，0为正文前）<textarea id="event_dialogues"></textarea></label><button id="saveEvent">保存事件并失效相关图片审核</button><button id="syncPanelVideo">同步本格到视频正文</button><button id="retainPanelVideo">仅调整分镜，保留视频原稿</button><button id="confirmPanelFacts">确认九格修改已与事件核对</button><pre id="validationOutput"></pre></section>
+<section class="lookup"><input id="lookupQuery" placeholder="输入宫格 ID、SHOT、REF、动作或 Prompt 互查" /><div id="lookupResults" class="lookup-results"></div></section>
+
+      <section class="line-legend" aria-label="线标图例">
+        <b>线标图例</b>
+        <span><i class="legend-line red"></i>主体动作 / 关键方向</span>
+        <span><i class="legend-line blue"></i>镜头运动</span>
+        <span><i class="legend-line cyan dashed"></i>视线方向</span>
+        <span><i class="legend-line yellow"></i>光源 / 亮区</span>
+        <span><i class="legend-line purple wave"></i>声音来源</span>
+        <span><i class="legend-box green"></i>资产REF / 连续性</span>
+        <em>未出现线标＝本格未指定该项</em>
+      </section>
+
+      <section class="workspace">
+        <div class="visual-column" id="visualColumn">
+          <div id="imageStage" class="image-stage"><div id="imageEmpty" class="empty">当前SEG的九格Prompt已准备；由Codex调用$imagegen后，结果由用户或助手手动回填到这里。</div><img id="storyboardImage" alt="当前SEG九宫格成品" /><div id="hitGrid" class="hit-grid"></div></div>
+          <canvas id="cropCanvas" width="640" height="360"></canvas>
+          <p id="cropMeta" class="muted">当前SEG尚未回填九宫格图片</p>
+          <div class="replacement-guide"><b>替换歧义格</b><span>① 选中格并填写偏差 → ② 生成单格重生Prompt → ③ 用$imagegen生成单张16:9替换图 → ④ 回填并自动嵌回原坐标</span></div>
+          <div class="actions"><label id="replacePanelLabel" class="button disabled">回填单格替换图<input id="panelReplaceInput" type="file" accept="image/png,image/jpeg,image/webp" disabled /></label><button id="downloadBoard" disabled>导出当前九宫格PNG</button><button id="downloadCurrent" disabled>导出当前格PNG</button><button id="downloadAll" disabled>导出本段九格</button></div>
+        </div>
+        <div class="editor-column">
+          <label>宫格 / SHOT / REF<select id="panelSelect"></select></label>
+          <div class="three-fields"><label>观察区间权重（不改事件时长）<input id="durationInput" disabled type="number" min="0.1" step="0.1" /></label><label>景别<select id="shotSizeInput"><option>大远景</option><option>远景</option><option>全景</option><option>中景</option><option>中近景</option><option>近景</option><option>特写</option><option>桌面特写</option><option>手部特写</option></select></label><label>运镜<select id="cameraMoveInput"><option>固定镜头</option><option>缓慢推近</option><option>缓慢拉远</option><option>缓慢横移</option><option>缓慢跟移</option><option>轻微手持微颤</option><option>受控焦点/构图转移</option></select></label></div>
+          <div class="two-fields"><label>SHOT REF<input id="shotRefInput" /></label><label>资产 REF<input id="assetRefsInput" /></label></div>
+          <details><summary>来源、状态与表演链</summary><label>观察角度<input id="angleInput"></label><label>来源ID（逗号分隔）<input id="sourceIdsInput"></label><label>起始状态<textarea id="startStateInput"></textarea></label><label>结束状态<textarea id="endStateInput"></textarea></label><label>表演来源<input id="performanceProvenanceInput"></label><label>表演链<textarea id="performanceSequenceInput"></textarea></label></details><label>画面动作与台词<textarea id="actionInput"></textarea></label>
+          <div class="two-fields textareas"><label>人物锚定<textarea id="characterAnchorInput"></textarea></label><label>场景锚定<textarea id="sceneAnchorInput"></textarea></label><label>动作与表情表演<textarea id="performanceInput"></textarea></label><label>连续性<textarea id="continuityInput"></textarea></label></div>
+          <div class="prompt-box"><b>当前格对应Prompt</b><pre id="panelPrompt"></pre></div>
+          <section id="editPanel" class="edit-panel" aria-label="单格修改">
+            <div class="edit-panel-heading"><b>单格修改：修图偏差与指定修改</b><span id="editStatus">待填写</span></div>
+            <p>先点选目标格，再按“期望 → 实际偏差 → 仅修改”填写。这里的内容只作用于当前格。</p>
+            <div class="edit-fields">
+              <label>期望内容<textarea id="expectedInput" placeholder="这格最终应该看到什么"></textarea></label>
+              <label>实际偏差<textarea id="actualInput" placeholder="当前画面哪里不对"></textarea></label>
+              <label class="wide">仅修改<textarea id="changeInput" placeholder="只允许改动什么；其余构图、角色、光线和八格保持不变"></textarea></label>
+            </div>
+          </section>
+          <details><summary>逐格制作线标与成图核验</summary><p id="annotationRequirements"></p><label>画内英文标题<input id="displayTitleEn"></label><label>画内英文短说明<input id="displayCaptionEn"></label><button id="saveDisplayText">保存英文显示文字</button><p id="visualCheckList"></p><p>计划：id、type（action/camera/gaze/light/sound/continuity）、target、label（中文语义）、label_en（英文显示）；箭头另填from/to。render:false仅内部记录，不画入图。只添加本格实际需要的类型。</p><label>线标计划JSON<textarea id="annotationPlanInput" rows="7"></textarea></label><button id="saveAnnotations">保存本格线标计划</button><p>看实际图后逐项填写id/status：ok为匹配，issue为漏画或错画，accepted必须填主人接受的reason。图片版本自动登记；记录不代表程序识别画面。</p><label>成图核验JSON<textarea id="annotationReviewInput" rows="5"></textarea></label><button id="saveAnnotationReview">保存线标查看记录</button></details><div class="actions"><button id="saveVersion" class="primary">保存本格版本</button><button id="buildEditPrompt">① 生成单格重生Prompt</button><button id="copyPanelPrompt">复制当前格Prompt</button></div>
+          <div class="prompt-box"><b>单格重生Prompt</b><pre id="editPrompt">尚未生成</pre></div>
+        </div>
+      </section>
+      <section class="version-library"><h2>当前SEG已保存版本</h2><div id="versionList" class="version-list"></div></section>
+      <section id="resultOutputStage" class="result-output-stage" aria-label="审核结束后的结果输出" hidden>
+        <div><span>第 6 阶段</span><h2>平台审核已结束 · 结果输出</h2><p>请选择最终成果的交付格式。这里只输出本轮全部审核通过的 SEG，不包含工作台编辑控件、草稿或未审核内容。</p></div>
+        <label>最终交付格式<select id="exportFormat" aria-label="最终成果交付格式"><option value="json">JSON 格式（结构化数据）</option><option value="html">网页格式（直接浏览）</option></select></label>
+        <button id="exportPackage" class="button primary">输出 JSON 成果</button>
+      </section>
+    </main>
+    <script src="./core.js"></script>
+    <script src="./nine-grid-app.js?v=9-post-review-export"></script>
+  </body>
+</html>

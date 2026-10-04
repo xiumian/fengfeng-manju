@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+node_modules/
+.env
+.env.*
+!.env.example
+credentials.json
+auth.json
+outputs/
+evidence/
+backups/
+*.mp4
+*.zip

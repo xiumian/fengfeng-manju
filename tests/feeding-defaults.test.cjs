@@ -1,0 +1,10 @@
+const test=require('node:test'),a=require('node:assert/strict'),C=require('../assets/workbench/core.js');
+const mk=()=>C.parseScript('——[0—3秒]：【扣腕】\n固定镜头，甲左手扣住乙右腕，断枪尖飞向门侧石缝，天门已经闭合。\n【音效】金属撞击。','新故事');
+function prepared(){const p=mk();for(const x of p.segments[0].panels){x.display_title_en='WRIST LOCK';x.display_caption_en='The gate is closed.';x.annotation_plan=[{id:'a',type:'action',target:'断枪尖',from:'断口',to:'门侧石缝',label:'飞出',label_en:'FLY OUT'},{id:'s',type:'sound',target:'兵器接触点',label:'撞击',label_en:'CLANG!'}];}return p;}
+test('英文显示字段在实际生图前校验，不能临场翻译',()=>{const p=prepared(),b=p.segments[0];a(C.feedingPreflight(b).valid);delete b.panels[0].annotation_plan[0].label_en;a(!C.feedingPreflight(b).valid);});
+test('连续性内部检查而非每格强制绿色字',()=>{const p=prepared(),b=p.segments[0];a(!C.annotationRequirements(b.panels[0],b).includes('continuity'));a(C.annotationPreflight(b).valid);a(C.visualChecks(b.panels[0]).some(x=>x.includes('左右手')));});
+test('干净生图稿不泄漏台账，使用明确英文',()=>{const p=prepared(),b=p.segments[0],x=b.panels[0];x.source_ids=['PRIVATE_SOURCE'];x.start_state='PRIVATE_STATE';x.performance_provenance='PRIVATE_PROVENANCE';const g=C.gridPrompt(b,p);a(g.includes('WRIST LOCK'));a(g.includes('FLY OUT'));for(const k of ['PRIVATE_SOURCE','PRIVATE_STATE','PRIVATE_PROVENANCE'])a(!g.includes(k));a(!C.videoPrompt(b,p).includes('WRIST LOCK'));});
+test('英文字段与内部标记保存恢复；隐藏标记不进入图',()=>{const p=prepared(),b=p.segments[0];b.panels[0].annotation_plan.push({id:'internal',type:'continuity',target:'手部',label:'INTERNAL_ONLY',render:false});const q=C.restore(JSON.stringify(p));a.equal(q.segments[0].panels[0].display_title_en,'WRIST LOCK');a(!C.gridPrompt(q.segments[0],q).includes('INTERNAL_ONLY'));});
+test('静物允许明确空标注，不等于缺规划',()=>{const p=C.parseScript('——[0—2秒]：【静物】\n固定镜头，桌面只有一封信。','静物'),b=p.segments[0];b.panels.forEach(x=>x.annotation_plan=[]);a(C.annotationPreflight(b).valid);});
+
+test('源剧情更新后旧英文不能直接复制生图',()=>{const p=prepared(),b=p.segments[0];C.updateEvent(p,b.segment_id,b.events[0].id,{body:'甲把断枪收回。'});a(!C.feedingPreflight(b).valid);});
