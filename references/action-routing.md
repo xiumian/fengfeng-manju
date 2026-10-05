@@ -9,3 +9,9 @@
 要求高速闪身、穿阵或边跑边使兵器时，读[高速穿行与移动攻击案例](cases/fast-traversal-combat.md)。区分原参考已观察表现与新题材未验证适配，不替代通用核心。
 
 战斗过程展开时，按需读取[战斗事件参考写法](cases/battle-event-expansion.md)，原文方法与成片验证分开记录。
+
+腿法主导、扫腿破阵、空中腿技、借物蹬踏、踢矛或下劈终结时，按招式查[腿法、特效规模与运镜案例](cases/leg-combat-camera.md)，保留原文组合，验证边界见案例。
+
+要求多动作高速拳脚、环境借力或终结突围时，按组合读取[高速拳脚与环境借力库](cases/rapid-unarmed-environment.md)；腿法原文仍见leg-combat-camera.md，不重复整库加载。
+
+动作/武器扩充按事件查[libraries/index.md](libraries/index.md)，再选动作组合或武器组合相关条目；不同时全文加载。

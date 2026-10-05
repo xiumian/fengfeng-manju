@@ -3,7 +3,7 @@ name: fengfeng-manju
 description: 将故事想法或剧本制作成文武戏时间轴、九宫格故事板和连续描述视频提示词；支持无资产文字起步、实际出图检视、单格修改、工作台保存恢复与成果交付。用户要求fengfeng漫剧、剧宫导演、剧本转九宫图、融合导演流程或从故事到分镜视频提示词时使用。
 metadata:
   author: fengfeng
-  version: 0.4.3
+  version: 0.4.4
 ---
 
 # fengfeng漫剧
