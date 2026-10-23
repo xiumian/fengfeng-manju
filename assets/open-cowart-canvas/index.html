@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Open Cowart canvas · 九宫格制作台</title>
+    <link rel="stylesheet" href="./styles.css?v=7" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <div class="mark">OC</div>
+          <div>
+            <h1>Open Cowart canvas · 九宫格制作台</h1>
+            <p>剧本解析 → 数字资产 → 导演调度 → 微表演 → 九宫格 → $imagegen → 拆图与逐格修改</p>
+          </div>
+        </div>
+        <div class="top-actions">
+          <button class="icon-button" id="zoomOut" title="缩小">-</button>
+          <button class="zoom-readout" id="zoomReadout" title="当前缩放">100%</button>
+          <button class="icon-button" id="zoomIn" title="放大">+</button>
+          <button class="command-button" id="fitView">适配画布</button>
+          <button class="command-button" id="exportWorkflow">导出 JSON</button>
+          <button class="command-button primary" id="runWorkflow">运行预演</button>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <aside class="left-panel">
+          <section class="panel-section">
+            <div class="section-title">输入剧本</div>
+            <textarea id="scriptInput" spellcheck="false">秦剑师盘坐面对祭坛，微阖双目，看似打坐，实则昏睡，桃木剑横亘在盘坐的双腿上。听到竹林里的声音，不禁微睁双目，眼神瞬间警醒地瞟向身后的声音来处。</textarea>
+            <button class="wide-button" id="analyzeScript">解析为镜头与资产</button>
+          </section>
+
+          <section class="panel-section">
+            <div class="section-title">可添加模块</div>
+            <div class="module-palette" id="modulePalette"></div>
+          </section>
+
+          <section class="panel-section compact">
+            <div class="section-title">工作流导航</div>
+            <div class="skill-list">
+              <button class="skill" data-node-target="n1">1 剧本解析</button>
+              <button class="skill" data-node-target="n4d">2 导演调度</button>
+              <button class="skill" data-node-target="n4m">3 微表演节拍</button>
+              <button class="skill active" data-node-target="n5">4 九宫格设定</button>
+              <button class="skill" data-node-target="n6">5 $imagegen 成品</button>
+              <button class="skill" data-node-target="n7">6 逐格拆图与修改</button>
+              <button class="skill" data-node-target="n8">7 视频提示词</button>
+              <button class="skill" data-node-target="n12">8 连续性检查</button>
+            </div>
+          </section>
+        </aside>
+
+        <section class="canvas-wrap" id="canvasWrap">
+          <div class="canvas-toolbar">
+            <button class="tool active" data-mode="select" title="选择">↖</button>
+            <button class="tool" data-mode="connect" title="连接">⛓</button>
+            <button class="tool" data-mode="pan" title="平移">✥</button>
+            <div class="divider"></div>
+            <button class="tool" id="toggleMinimap" title="小地图">▣</button>
+          </div>
+          <div class="stage" id="stage">
+            <div class="grid"></div>
+            <svg class="edges" id="edges" width="6000" height="4000" viewBox="0 0 6000 4000"></svg>
+            <div class="nodes-layer" id="nodesLayer"></div>
+          </div>
+          <div class="minimap" id="minimap">
+            <div class="mini-title">流程地图</div>
+            <div class="mini-track" id="miniTrack"></div>
+          </div>
+        </section>
+
+        <aside class="right-panel">
+          <section class="detail-card" id="nodeDetail">
+            <div class="empty-state">选择一个模块查看输入、输出和运行状态。</div>
+          </section>
+
+          <section class="detail-card">
+            <div class="section-title">资产绑定预览</div>
+            <div class="asset-strip">
+              <img src="./assets/char_A.jpg" alt="角色资产 char_A" />
+              <img src="./assets/scene_03.jpg" alt="场景资产 scene_03" />
+              <img src="./assets/char_B.jpg" alt="角色资产 char_B" />
+            </div>
+            <div class="binding-list">
+              <span id="bindingCharacter">char_A</span>
+              <span id="bindingScene">scene_03</span>
+              <span id="bindingProp">prop_letter_01</span>
+              <span id="bindingVoice">voice_A</span>
+            </div>
+          </section>
+
+          <section class="detail-card">
+            <div class="section-title">生成提示词快照</div>
+            <pre id="promptPreview">Use char_A + scene_03.
+char_A enters from frame left, stops beside the center table, looks at prop_letter_01, hesitates, then picks it up.
+Static medium shot, 35mm lens feel. No identity drift, no extra people, no background warping.</pre>
+          </section>
+
+          <section class="detail-card">
+            <div class="section-title">结构化输出</div>
+            <pre id="workflowJson"></pre>
+          </section>
+        </aside>
+      </main>
+
+      <footer class="timeline">
+        <div class="timeline-head">时间线装配</div>
+        <div class="timeline-track" id="timelineTrack"></div>
+      </footer>
+    </div>
+
+    <script src="./app.js?v=7"></script>
+  </body>
+</html>

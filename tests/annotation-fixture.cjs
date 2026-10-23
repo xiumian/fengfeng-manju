@@ -1,2 +1,0 @@
-// Synthetic annotation/view records for unrelated unit-test fixtures only; never real image approval.
-const C=require('../assets/workbench/core.js');module.exports=function fixture(p){for(const b of p.segments)for(const x of b.panels){x.annotation_plan=C.annotationRequirements(x,b).map(type=>({id:type,type,target:'测试主体/作用点',from:'测试起点',to:'测试终点',label:'测试'+type}));x.annotation_review=x.annotation_plan.map(n=>({id:n.id,status:'ok',image_revision:b.image_revision||1,test_only:true}));}return p;};

@@ -1,0 +1,39 @@
+{
+  "package_name": "fengfeng manju",
+  "distribution_name": null,
+  "version": "7.12-unified-design-routing",
+  "build_date": "2026-10-13",
+  "trigger": "9宫",
+  "trigger_aliases": [
+    "九宫",
+    "九宫格",
+    "九宫格工作台"
+  ],
+  "launcher": "启动九宫格.cmd",
+  "entry_document": "9宫.md",
+  "skill_entry": "SKILL.md",
+  "canvas": "assets/open-cowart-canvas/nine-grid.html",
+  "default_project": null,
+  "default_port": "dynamic-localhost",
+  "segments": null,
+  "prompt_transform": "完整剧情 → 视频主稿 → 九宫取样验证 → 分类修正 → 从确认主稿交付",
+  "workbench_features": [
+    "D1-D5项目配置",
+    "九个不重复观察状态",
+    "成图到剧本再到Prompt双层反查",
+    "剧情驱动的微表情与特写转换",
+    "图片和单格预览内嵌HTML",
+    "JSON与HTML结果输出"
+  ],
+  "system_managed_capabilities": [
+    "Codex",
+    "imagegen",
+    "browser runtime"
+  ],
+  "vfx_library": {
+    "version": "1.0",
+    "categories": 8,
+    "entries": 48,
+    "index": "references/招式特效库/索引.md"
+  }
+}

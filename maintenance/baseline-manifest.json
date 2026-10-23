@@ -1,0 +1,337 @@
+{
+  "baseline": "v7.13-baseline-20261023",
+  "source_version": "7.13",
+  "files": [
+    {
+      "path": "9pic.md",
+      "sha256": "d84cc55ce409c1e072ce95f3a56f21d556ac121f3e89069418aa6db02ed8570e"
+    },
+    {
+      "path": "9宫.command",
+      "sha256": "ce4cf03fcac1a6975723c31e3bc2dcca9284fb82738f9719daa1d0189130f21a"
+    },
+    {
+      "path": "9宫.md",
+      "sha256": "b6b2b3eae416620963d1a10e5c08769f10f721bd49db25bb956c2462b5fe748f"
+    },
+    {
+      "path": "agents/openai.yaml",
+      "sha256": "a5cd2d04f4c1c9c542635e1b6b26d9080094084a327783fb44930be3ea855f49"
+    },
+    {
+      "path": "assets/default-storyboard-style.png",
+      "sha256": "71c0bd0e47e4ca0654e3a9a0117f3182dba0c6b74b37496269ce48d8326dd0b4"
+    },
+    {
+      "path": "assets/open-cowart-canvas/app.js",
+      "sha256": "cb1c2883fd52acaf80fd95fc0417d7800e18a1984e24b1f94e8cf12fcc0847b8"
+    },
+    {
+      "path": "assets/open-cowart-canvas/index.html",
+      "sha256": "3bf9ff76080d5bc207cb1715aea0a2d47b9d2c76e80fea0a743ab81824623f1f"
+    },
+    {
+      "path": "assets/open-cowart-canvas/nine-grid-app.js",
+      "sha256": "ac69bbbd9cdc30f57d0e12f045d8814f414920c6d49073c54a6f2b236506d183"
+    },
+    {
+      "path": "assets/open-cowart-canvas/nine-grid.css",
+      "sha256": "4e9adfa258425f3afddaa2b484ce817d21b0a5ce1efec07f89e10210244f9ed8"
+    },
+    {
+      "path": "assets/open-cowart-canvas/nine-grid.html",
+      "sha256": "57b7f2b679d7abe0838f6c17bbb1f6d6da25798c980068115c31e210a2b9b585"
+    },
+    {
+      "path": "assets/open-cowart-canvas/package-marker.txt",
+      "sha256": "312d8145d30c01c6cf59440ddfbfc929016d7cdc182159947a3f4ab560f638e0"
+    },
+    {
+      "path": "assets/open-cowart-canvas/preview.png",
+      "sha256": "7026dc85f709fe5dd52d44027db3cf6ed2515c1c37054dc11d957c61724122de"
+    },
+    {
+      "path": "assets/open-cowart-canvas/styles.css",
+      "sha256": "237ff8189a437de631d9b9dd4853ead168e2d316b5dfc916acb6e16bd4cc2ee5"
+    },
+    {
+      "path": "assets/publishing-calendar.md",
+      "sha256": "21883160923733e7621f9f2316e2e4699c3bc70583de01ed9e63d2ffb7ad3c7e"
+    },
+    {
+      "path": "assets/script-template.md",
+      "sha256": "238c74bc129ece868d5d23a7f93c58859f5be3e7e37de2e54b7d58e3321387cf"
+    },
+    {
+      "path": "assets/shooting-checklist.md",
+      "sha256": "6296be430948ee1e4dff97e824d3d07f1a699433f4281036d8e8d41c7540c3e5"
+    },
+    {
+      "path": "README-先看.md",
+      "sha256": "67dcb8d7f6c59451f56df89bf0e0716b61f2ddcabd26a1b8e2a1e8c81b2d8a9b"
+    },
+    {
+      "path": "references/asset-matching.md",
+      "sha256": "ca7cd11fc62cde08483e3b42e49602db685409e27bfc31c1712a0b75ba235d55"
+    },
+    {
+      "path": "references/capcut-guide.md",
+      "sha256": "191ed5ceaa34337603d6415c5dc849d61b136dae92d04f2ee1c9aad5260f87eb"
+    },
+    {
+      "path": "references/combat-choice-and-speed.md",
+      "sha256": "3dc47e0d217678800fdb1b15c4a04122ea2be7b678504048c703ba78a7de6ae5"
+    },
+    {
+      "path": "references/debugging-and-ui.md",
+      "sha256": "12b5f23aafc5c6f5de4157ae5223359a37489a30ae46634edbc6f30c4fc50531"
+    },
+    {
+      "path": "references/director-blocking-grammar.md",
+      "sha256": "d09ecac7fb263a5f42ca52211a072b6e249e18609f1efcd2dcc21e86683c194b"
+    },
+    {
+      "path": "references/director-output-contract.md",
+      "sha256": "d80f63bd26d455b685131f857ab736e36f2e9f8f8bb3ccb193c456b7de4ff31a"
+    },
+    {
+      "path": "references/director-shot-bridges.md",
+      "sha256": "ab57b9abfe4210aebc719d0d41984ee21848bcf565487a47bf8429b6604fab97"
+    },
+    {
+      "path": "references/douyin-best-practices.md",
+      "sha256": "8cc8b1e3a5f26496f5baea8379cf898c1f4c26899b2f62859464700c7b057b11"
+    },
+    {
+      "path": "references/emotion-closeup-conversion.md",
+      "sha256": "5b279a38689c4d6cb1149ba7b8740ba8cd4c16ce02f7286a39e123b92319459f"
+    },
+    {
+      "path": "references/generation-action-visual-control.md",
+      "sha256": "f61677bdc9855354299cfbeafaf28f4b144d49c140e061007d63d4ca11d28a2a"
+    },
+    {
+      "path": "references/genre-performance-direction.md",
+      "sha256": "361871207df387ad813428ebd0756e3e3b720bf9f3fcc373c232f2ad179e1d89"
+    },
+    {
+      "path": "references/hierarchical-routing.md",
+      "sha256": "0c5762ca1bcdb93206082ff8d5e661cae61a2cec76f67d91ae60ef013808b639"
+    },
+    {
+      "path": "references/microexpression-cues.md",
+      "sha256": "a5f7727fb586be3489e5fce24c1217c85f0309df81adfd5cde35928073cb5d2b"
+    },
+    {
+      "path": "references/microexpression-prompt-templates.md",
+      "sha256": "2436d292afd14c13e305d3b4ca8f653b3e06cd9367f443cde9d5cb177cb6fa57"
+    },
+    {
+      "path": "references/moke-research-provenance.md",
+      "sha256": "46a67cd3bae5eb73b55dd9346101c424c39f77672c4f5bf9fe8e7bc053a15648"
+    },
+    {
+      "path": "references/nine-grid-workflow.md",
+      "sha256": "22b4104266d2bc55bc8ebd26bbcb583808552e8a40f30b40aff6d855497b74c8"
+    },
+    {
+      "path": "references/production-modules.md",
+      "sha256": "dcac156409f8da7cfd201e0a707c09b1b611242100bdfa00ee33c876f27fdea5"
+    },
+    {
+      "path": "references/shot-and-segment.md",
+      "sha256": "8fadcf0ecf3546a0d8017be6b434af29c609ddc036eecbe0ccc43236002c5b1b"
+    },
+    {
+      "path": "references/storyboard-generation.md",
+      "sha256": "6ea2d84e77216eb3a251cb21dbe8f7f6914ba8420a6364c84a60205fee6441fa"
+    },
+    {
+      "path": "references/storyboard-prompter-v2.9/consistency-rules.md",
+      "sha256": "bf7c8bc7c5aec149a2bff2c4d5ff4e308489953e7e3cc1ea5a88bf437a1cfeff"
+    },
+    {
+      "path": "references/storyboard-prompter-v2.9/core-skill.md",
+      "sha256": "7391e85a5a476ad1daadb4ed7446e883d4e0d386f167770f5a4b63beea2bbd6a"
+    },
+    {
+      "path": "references/storyboard-prompter-v2.9/cross-segment-consistency.md",
+      "sha256": "c44f32c60e6dc948c4be250a6c5158c3f87dce6e3fe55561f15749ef066856fb"
+    },
+    {
+      "path": "references/storyboard-prompter-v2.9/dialogue-blocking.md",
+      "sha256": "f808e8eb5957401dbfcd067772b12aa834138c36d667205138e1961bffb096cb"
+    },
+    {
+      "path": "references/storyboard-prompter-v2.9/fixed-shot-splitting-rules.md",
+      "sha256": "fb47e8dcd0adfcfaf5f9dc9383fcc0c94a47d4d9b04aad7470e9c2c27792e744"
+    },
+    {
+      "path": "references/storyboard-prompter-v2.9/multi-person-blocking.md",
+      "sha256": "1a6163b6bae1d846976b0a96e9b30231a3199ff6935bb804902e5653c2cdc3dd"
+    },
+    {
+      "path": "references/storyboard-prompter-v2.9/nine-grid-workflow.md",
+      "sha256": "dc21cb9bb3699ef86c6d2c655648b52e6563c2565d3993754733c7c379094f8f"
+    },
+    {
+      "path": "references/storyboard-prompter-v2.9/performance-conversion.md",
+      "sha256": "5ee68dc406cb2803335fdcbde6962c3f7fef7c02a1ef338ada787808c76965e1"
+    },
+    {
+      "path": "references/storyboard-prompter-v2.9/seedance-2.0-realshot-9-16.md",
+      "sha256": "951a948b5fc2263953734bc6e960790272e09156b431b685edf2008a73a8185a"
+    },
+    {
+      "path": "references/storyboard-prompter-v2.9/shot-types.md",
+      "sha256": "774f5c46685c1a118e66df7efe4046f09f2661382786c12b0de5fb2531e6c76a"
+    },
+    {
+      "path": "references/video-master-validation.md",
+      "sha256": "a29321ef7fa05a7579123363f1b220004ed495deb8cbf16488db627f57f0c548"
+    },
+    {
+      "path": "references/video-prompt-template.txt",
+      "sha256": "902e7d282d0c0a145fdfa52243f5c91176b7e81f534e804f6d402c92d8e5a883"
+    },
+    {
+      "path": "references/video-prompt.md",
+      "sha256": "0b199bf5b2fb2a3f29ba3a0cd53b9c73f20169c59ed7b6e721fe81c0f696aad7"
+    },
+    {
+      "path": "references/video-types.md",
+      "sha256": "f854b3bb3907f27fcc3740638cfb33d15c412adb08f3a8582bf3936debbc7329"
+    },
+    {
+      "path": "references/visual-impact-design.md",
+      "sha256": "c4dea974bb84b6865d57942fe3e1c2fdcbc50361a6526cdbe27773b6776df03f"
+    },
+    {
+      "path": "references/招式特效库/01_剑气与御剑.md",
+      "sha256": "54f4ffd644846d2af2745d9d075dcee3bfec07d3e00bec1bd6be7532f35c2c0c"
+    },
+    {
+      "path": "references/招式特效库/02_拳掌与气劲.md",
+      "sha256": "1220e7678c9f62f05b1375dd637064bbdf5f64afbcff843f959320b56d76e3c3"
+    },
+    {
+      "path": "references/招式特效库/03_火焰与熔岩.md",
+      "sha256": "b04909000e15fea286f713adaa22157d6c2a70225006a00b0c0f4c2bb6589e05"
+    },
+    {
+      "path": "references/招式特效库/04_水流与寒冰.md",
+      "sha256": "b5c0cff1e8ab24e28279a5cf7b2177bf9d09518ba5091b148d6bd107052da8ad"
+    },
+    {
+      "path": "references/招式特效库/05_雷电与风压.md",
+      "sha256": "a6ca8d2bb89813ef530c45c5db0f77ce4ccf1e7d5dbeea60bb101ca0330073f6"
+    },
+    {
+      "path": "references/招式特效库/06_岩土与木系.md",
+      "sha256": "f857f7366f81fdde31273c99e80b3b734f382d647c255b02aa33fa94e6cfff78"
+    },
+    {
+      "path": "references/招式特效库/07_护盾与阵法.md",
+      "sha256": "42a9d3cf50059ef1e2bfc2840d53a16c51c34b50868e74017a7ca40d0223f553"
+    },
+    {
+      "path": "references/招式特效库/08_兽形与空间异象.md",
+      "sha256": "b8e8f7490ee06f6a88c4c2bd3d15342c5a2941920003baeaea05ce4797b8050e"
+    },
+    {
+      "path": "references/招式特效库/来源记录.md",
+      "sha256": "609815ce93b274798cdcfbc6f87c1a036862b8e95ca9093d657246d9bd2e1860"
+    },
+    {
+      "path": "references/招式特效库/来源资料/小说战斗与宏大画面爽感执行规则_V1.0.md",
+      "sha256": "06169917ad088cb2397a1b08b4e607f345273d2c18bb3dd41f7f89f2c0f94cd6"
+    },
+    {
+      "path": "references/招式特效库/检索索引.json",
+      "sha256": "56721e362e786ff5c3dafb2c7734f3a4f9bb7595166acb4acb075f3b9cecdb75"
+    },
+    {
+      "path": "references/招式特效库/索引.md",
+      "sha256": "4f5e7b852fcbaa61f15d4803e6a2a93382d4f1d7527a6a22c2496e79dfb19cf6"
+    },
+    {
+      "path": "references/招式特效库/表现与爽感规则.md",
+      "sha256": "f8b4bd89d3e9895d7bd5fae9a0b89f5aa213b7534290aa88b486999a95927e7f"
+    },
+    {
+      "path": "references/招式特效库/调用规则.md",
+      "sha256": "c82ac5be443cb870a537400f0883099126523fae35b871df3d222c9cbca845a4"
+    },
+    {
+      "path": "scripts/analyze_video_data.py",
+      "sha256": "9ff25179e891ad78f272465d97272d304976a998bffe5ad9c36412f76854ae17"
+    },
+    {
+      "path": "scripts/generate_script.py",
+      "sha256": "80087a8b43b22039e8aa5590a96133e9cf915d2c4f87b936af6a71d0d2703512"
+    },
+    {
+      "path": "SKILL.md",
+      "sha256": "d311fe2318bd4cb6d339522e31e6c1af1aac80172c150f5260b70b77ab064e5d"
+    },
+    {
+      "path": "start-nine-grid.ps1",
+      "sha256": "b2db27786d03d89acfec2b4540ac705dbbcecfe03d79f1e41a13648b7c474ad4"
+    },
+    {
+      "path": "启动九宫格.cmd",
+      "sha256": "0e40126d93230bceeff6e3b42040fb28292bd4b71d869d0c967c3e1d40fde489"
+    },
+    {
+      "path": "启动九宫格.ps1",
+      "sha256": "b2db27786d03d89acfec2b4540ac705dbbcecfe03d79f1e41a13648b7c474ad4"
+    },
+    {
+      "path": "团队使用说明.md",
+      "sha256": "eb7e1fdfe4a1c74cd730af61b1aecb31580b428d9ac11b02ca92ccbc114d1882"
+    },
+    {
+      "path": "版本信息.json",
+      "sha256": "ec6baa9d5c72cad8e49c60b07ef092fb6dfc8f4d5fcba114283a600df4018e62"
+    }
+  ],
+  "excluded_paths": [
+    "assets/open-cowart-canvas/assets/char_A.jpg",
+    "assets/open-cowart-canvas/assets/char_B.jpg",
+    "assets/open-cowart-canvas/assets/scene_03.jpg",
+    "assets/open-cowart-canvas/projects/images/replacements/SEG04-P05-v03.png",
+    "assets/open-cowart-canvas/projects/images/replacements/SEG04-P09-v03.png",
+    "assets/open-cowart-canvas/projects/laozu-four-segment-review-v02.html",
+    "assets/open-cowart-canvas/projects/laozu-image-debug-v02.json",
+    "assets/open-cowart-canvas/projects/laozu-image-debug-v03.json",
+    "assets/open-cowart-canvas/projects/laozu-image-debug-v04.json",
+    "assets/open-cowart-canvas/projects/laozu-image-debug-v05.json",
+    "assets/open-cowart-canvas/projects/laozu-panel-review-v01.html",
+    "assets/open-cowart-canvas/projects/laozu-prompt-review-v01.json",
+    "assets/open-cowart-canvas/projects/laozu-workbench-import-v06.json",
+    "assets/open-cowart-canvas/projects/linjian-tuwei-og-tmp01.json",
+    "assets/open-cowart-canvas/projects/OG-TMP01-storyboard-v01.png",
+    "assets/open-cowart-canvas/projects/og07-panel-images/OG07-P01-v01.png",
+    "assets/open-cowart-canvas/projects/og07-panel-images/OG07-P02-v01.png",
+    "assets/open-cowart-canvas/projects/og07-panel-images/OG07-P03-v01.png",
+    "assets/open-cowart-canvas/projects/og07-panel-images/OG07-P04-v01.png",
+    "assets/open-cowart-canvas/projects/og07-panel-images/OG07-P05-v01.png",
+    "assets/open-cowart-canvas/projects/og07-panel-images/OG07-P06-v01.png",
+    "assets/open-cowart-canvas/projects/og07-panel-images/OG07-P07-v01.png",
+    "assets/open-cowart-canvas/projects/og07-panel-images/OG07-P08-v01.png",
+    "assets/open-cowart-canvas/projects/og07-panel-images/OG07-P09-v01.png",
+    "assets/open-cowart-canvas/projects/OG07-storyboard-v01.png",
+    "assets/open-cowart-canvas/projects/og07.json",
+    "assets/open-cowart-canvas/projects/SEG01-storyboard-v01.png",
+    "assets/open-cowart-canvas/projects/SEG02-storyboard-v01.png",
+    "assets/open-cowart-canvas/projects/SEG03-storyboard-v01.png",
+    "assets/open-cowart-canvas/projects/SEG04-storyboard-v01.png",
+    "project-inputs/同源1版.md",
+    "references/project-handoff/00-明日从这里开始(1).md",
+    "references/project-handoff/01-对话需求时间线.md",
+    "references/project-handoff/02-工作台验收清单.md",
+    "references/project-handoff/03-缺失的iMac原工程文件.md",
+    "references/project-handoff/04-对话原文与处理记录.md"
+  ],
+  "note": "选中源文件逐字节保存；未修复源包内版本标识不一致。排除私人项目与交接材料。"
+}
