@@ -100,29 +100,29 @@ HASHTAG_CATEGORIES = {
 def generate_hook(video_type: str, topic: str) -> List[str]:
     """生成开头Hook建议"""
     hooks = []
-    
+
     if video_type in VIDEO_TYPE_TEMPLATES:
         hook_types = VIDEO_TYPE_TEMPLATES[video_type]["hook_types"]
-        
+
         for hook_type in hook_types:
             if hook_type in HOOK_TEMPLATES:
                 templates = HOOK_TEMPLATES[hook_type]
                 for template in templates[:2]:  # 每个类型取2个
                     hooks.append(template)
-    
+
     return hooks[:5]  # 返回前5个
 
 def generate_script(outline: Dict) -> Dict:
     """
     根据大纲生成详细脚本
-    
+
     Args:
         outline: 脚本大纲
             - type: 视频类型
             - topic: 主题
             - duration: 目标时长
             - key_points: 关键点列表
-    
+
     Returns:
         完整脚本字典
     """
@@ -130,10 +130,10 @@ def generate_script(outline: Dict) -> Dict:
     topic = outline.get("topic", "")
     duration = outline.get("duration", 30)
     key_points = outline.get("key_points", [])
-    
+
     # 获取类型模板
     template = VIDEO_TYPE_TEMPLATES.get(video_type, VIDEO_TYPE_TEMPLATES["教程"])
-    
+
     # 生成脚本结构
     script = {
         "title": f"【{video_type}】{topic}",
@@ -142,11 +142,11 @@ def generate_script(outline: Dict) -> Dict:
         "hook_suggestions": generate_hook(video_type, topic),
         "structure": []
     }
-    
+
     # 根据结构生成详细内容
     structure = template["structure"]
     time_per_section = duration // len(structure)
-    
+
     for i, section in enumerate(structure):
         section_script = {
             "section": section,
@@ -156,30 +156,30 @@ def generate_script(outline: Dict) -> Dict:
             "text_overlay": "",  # 字幕/文字
             "tips": ""  # 技巧提示
         }
-        
+
         # 根据不同部分和视频类型填充内容
         if i == 0:  # 开头部分
             section_script["visual"] = "吸引人的画面/动作"
             section_script["audio"] = f"{generate_hook(video_type, topic)[0] if generate_hook(video_type, topic) else '开头吸引人'}"
             section_script["tips"] = "前3秒决定完播率，必须吸引人！"
-        
+
         script["structure"].append(section_script)
-    
+
     # 生成标题建议
     script["title_suggestions"] = generate_titles(topic, video_type)
-    
+
     # 生成标签建议
     script["hashtag_suggestions"] = generate_hashtags(topic, video_type)
-    
+
     # 生成文案建议
     script["caption_suggestions"] = generate_captions(topic, video_type)
-    
+
     return script
 
 def generate_titles(topic: str, video_type: str) -> List[str]:
     """生成标题建议"""
     titles = []
-    
+
     for template in TITLE_TEMPLATES[:3]:
         try:
             title = template.format(
@@ -196,7 +196,7 @@ def generate_titles(topic: str, video_type: str) -> List[str]:
             titles.append(title)
         except:
             pass
-    
+
     return titles if titles else [f"【{video_type}】{topic}"]
 
 def generate_hashtags(topic: str, video_type: str) -> Dict[str, List[str]]:
@@ -206,16 +206,16 @@ def generate_hashtags(topic: str, video_type: str) -> Dict[str, List[str]]:
         "垂直标签": [],
         "长尾标签": [f"#{topic}", f"#{video_type}{topic}"]
     }
-    
+
     # 根据视频类型推荐垂直标签
     for category, tags in HASHTAG_CATEGORIES["垂直"].items():
         if category in video_type or category in topic:
             hashtags["垂直标签"] = tags[:3]
             break
-    
+
     if not hashtags["垂直标签"]:
         hashtags["垂直标签"] = HASHTAG_CATEGORIES["垂直"]["生活"][:3]
-    
+
     return hashtags
 
 def generate_captions(topic: str, video_type: str) -> List[str]:
@@ -225,7 +225,7 @@ def generate_captions(topic: str, video_type: str) -> List[str]:
         f"关于{topic}，你可能一直都做错了！\n\n正确做法在视频里👆\n\n#标签1 #标签2\n\n关注我学更多干货！",
         f"没想到{topic}竟然这么简单！\n\n学会的扣1🙋\n\n#标签1 #标签2 #标签3"
     ]
-    
+
     return captions
 
 def print_script(script: Dict):
@@ -233,14 +233,14 @@ def print_script(script: Dict):
     print("=" * 60)
     print(f"📝 视频脚本：{script['title']}")
     print("=" * 60)
-    
+
     print(f"\n【视频类型】{script['type']}")
     print(f"【目标时长】{script['target_duration']}")
-    
+
     print("\n【开头Hook建议】")
     for i, hook in enumerate(script["hook_suggestions"], 1):
         print(f"{i}. {hook}")
-    
+
     print("\n【脚本结构】")
     for section in script["structure"]:
         print(f"\n--- {section['section']} ({section['time']}) ---")
@@ -248,21 +248,21 @@ def print_script(script: Dict):
         print(f"音频: {section['audio']}")
         print(f"字幕: {section['text_overlay']}")
         print(f"提示: {section['tips']}")
-    
+
     print("\n【标题建议】")
     for i, title in enumerate(script["title_suggestions"], 1):
         print(f"{i}. {title}")
-    
+
     print("\n【标签建议】")
     hashtags = script["hashtag_suggestions"]
     print(f"热门: {', '.join(hashtags['热门标签'])}")
     print(f"垂直: {', '.join(hashtags['垂直标签'])}")
     print(f"长尾: {', '.join(hashtags['长尾标签'])}")
-    
+
     print("\n【文案建议】")
     for i, caption in enumerate(script["caption_suggestions"], 1):
         print(f"\n文案{i}:\n{caption}")
-    
+
     print("\n" + "=" * 60)
 
 def main():
@@ -275,31 +275,31 @@ def main():
         # 交互式输入
         print("📝 视频脚本生成器")
         print("=" * 60)
-        
+
         outline = {
             "type": input("视频类型 (教程/种草/剧情/Vlog/测评/知识分享): ") or "教程",
             "topic": input("视频主题: "),
             "duration": int(input("目标时长(秒, 默认30): ") or 30),
             "key_points": []
         }
-        
+
         print("请输入关键点（每行一个，空行结束）:")
         while True:
             point = input()
             if not point:
                 break
             outline["key_points"].append(point)
-    
+
     # 生成脚本
     script = generate_script(outline)
-    
+
     # 打印脚本
     print_script(script)
-    
+
     # 保存为JSON
     with open("generated_script.json", "w", encoding="utf-8") as f:
         json.dump(script, f, ensure_ascii=False, indent=2)
-    
+
     print("\n✅ 脚本已保存到 generated_script.json")
 
 if __name__ == "__main__":

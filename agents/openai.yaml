@@ -1,7 +1,7 @@
 interface:
   display_name: "fengfeng manju"
-  short_description: "说“九宫”即可：完整视频主稿、九宫取样验证、逐格修正与成果交付"
-  default_prompt: "使用 $fengfeng-manju，保留我提供的完整剧情，先编写视频主稿，再用九宫格验证并修正。"
+  short_description: "按任务分层调度动作、表演和摄影，保留完整事件，输出视频主稿与按需九宫"
+  default_prompt: "使用 $fengfeng-manju，按我的当前交付选择工序，保留完整剧情，完成主稿及必要检查；仅在我要求时做九宫。"
   brand_color: "#2563EB"
 policy:
   allow_implicit_invocation: true

@@ -1,0 +1,11 @@
+const {test}=require('node:test');
+const assert=require('node:assert/strict');
+const core=require('../assets/open-cowart-canvas/event-core.js');
+function fixture(){return {events_complete:true,source_coverage_checked:true,events:Array.from({length:12},(_,i)=>({id:'E'+i,start:i,end:i+1,body:'原事件'+i,source_ids:['S1'],dialogues:i===10?[{text:'未入格对白'}]:[]})),panels:Array.from({length:9},(_,i)=>({id:'P'+i,event_ids:['E'+i],sample_time:i+.5,duration:8,action:'样本'}))};}
+test('refresh and edit preserve 12 events, ids, samples and unselected dialogue',()=>{const b=fixture();const before=structuredClone(b.events);const panels=structuredClone(b.panels);core.refresh(b);b.panels[0].action='只改观察';core.refresh(b);assert.deepEqual(b.events,before);assert.equal(b.events[10].dialogues[0].text,'未入格对白');assert.deepEqual(b.panels.map(p=>p.event_ids),panels.map(p=>p.event_ids));assert.equal(b.panels[0].sample_time,.5);});
+test('duration comes from 12 events, not nine times 8',()=>{assert.equal(core.duration(fixture()),12);});
+test('legacy board remains editable but cannot finalize or fabricate events',()=>{const b={panels:fixture().panels,completed:true};core.refresh(b);assert.equal(b.completed,false);assert.equal(b.events,undefined);assert.ok(core.eventErrors(b).length);});
+test('valid complete event board can pass structural gate',()=>{assert.deepEqual(core.eventErrors(fixture()),[]);});
+test('unknown reference and invalid sample are blocked',()=>{let b=fixture();b.panels[0].event_ids=['bad'];assert.ok(core.eventErrors(b).some(x=>x.includes('悬空')));b=fixture();b.panels[0].sample_time=99;assert.ok(core.eventErrors(b).some(x=>x.includes('采样时刻')));});
+test('gap NaN and duplicate ids blocked',()=>{for(const change of [b=>b.events[1].start=9,b=>b.events[1].end=NaN,b=>b.events[1].id='E0']){const b=fixture();change(b);assert.ok(core.eventErrors(b).length);}});
+test('core is embedded before app for online and saved HTML paths',()=>{const fs=require('node:fs');const html=fs.readFileSync(require('node:path').join(__dirname,'../assets/open-cowart-canvas/nine-grid.html'),'utf8');assert.ok(html.indexOf('data-event-core')<html.indexOf('data-nine-grid-app'));const app=fs.readFileSync(require('node:path').join(__dirname,'../assets/open-cowart-canvas/nine-grid-app.js'),'utf8');assert.ok(app.includes('core.textContent=coreText'));});

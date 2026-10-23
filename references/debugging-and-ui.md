@@ -1,3 +1,5 @@
+> 历史资料：退出v8默认运行。当前路线见SKILL.md与references/routing.md；不得据此恢复旧固定镜长、动作数或先九格后主稿流程。
+
 # Open Cowart 调试与界面规则
 
 ## 当前可执行核心

@@ -1,3 +1,5 @@
+> 历史资料：退出v8默认运行。当前路线见SKILL.md与references/routing.md；不得据此恢复旧固定镜长、动作数或先九格后主稿流程。
+
 # Output Contract
 
 Use this reference when the user wants reusable JSON, a shot list, asset grounding, role scheduling, camera descriptions, keyframe descriptions, or a production-facing format.

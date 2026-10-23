@@ -123,17 +123,7 @@ function loadProject() {
 }
 
 function deriveEventTimeline(board) {
-  let cursor=0;
-  const events=[];
-  board.panels.forEach((panel,index)=>{
-    const duration=Math.max(.1,Number(panel.duration)||.1),eventId=`${board.segment_id}-EV${String(index+1).padStart(2,"0")}`;
-    panel.observation_state=panel.observation_state||OBSERVATION_STATES[index]||`观察状态${index+1}`;
-    panel.event_ids=[eventId];
-    panel.sample_time=Number((cursor+duration/2).toFixed(2));
-    events.push({id:eventId,start:Number(cursor.toFixed(2)),end:Number((cursor+duration).toFixed(2)),shot_ref:panel.shot_ref,observation_state:panel.observation_state,body:panel.action});
-    cursor+=duration;
-  });
-  board.events=events;
+  return NineGridEvents.refresh(board);
 }
 
 function normalizeReverseValidation(snapshot) {
@@ -191,7 +181,7 @@ const optionFields={grid_mode:el("gridModeInput"),style_mode:el("styleModeInput"
 function escapeHtml(value) { return String(value ?? "").replace(/[&<>"']/g, (char) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char])); }
 function currentBoard() { return project.segments.find((item) => item.segment_id===activeSegmentId) || project.segments[0]; }
 function currentPanel() { const board=currentBoard(); return board.panels.find((item)=>item.id===activePanelId) || board.panels[0]; }
-function totalDuration(board=currentBoard()) { return Number(board.panels.reduce((sum,panel)=>sum+(Number(panel.duration)||0),0).toFixed(2)); }
+function totalDuration(board=currentBoard()) { return NineGridEvents.duration(board); }
 function normalizeSegmentId(index) { return `SEG${String(index+1).padStart(2,"0")}`; }
 
 function extractBlock(source,label) {
@@ -402,7 +392,7 @@ function loadFields(){ const panel=currentPanel(); Object.entries(fields).forEac
 function updateDerived(){
   const board=currentBoard(), panel=currentPanel(), index=project.segments.indexOf(board);
   const reverseAccepted=board.panels.filter(item=>item.reverse_status==="accepted").length, reverseComplete=reverseAccepted===board.panels.length;
-  el("scriptName").textContent=project.script_name||"未命名"; el("segmentId").textContent=board.segment_id; el("currentPanel").textContent=panel.id; el("totalDuration").textContent=`${totalDuration(board).toFixed(2)}s`; el("completionState").textContent=board.completed?"已完成":`成图反查 ${reverseAccepted}/${board.panels.length}`;
+  el("scriptName").textContent=project.script_name||"未命名"; el("segmentId").textContent=board.segment_id; el("currentPanel").textContent=panel.id; el("totalDuration").textContent=`${totalDuration(board).toFixed(2)}s${board.events_complete===true&&board.source_coverage_checked===true?"":"（待事件核对）"}`; el("completionState").textContent=board.completed?"已完成":`成图反查 ${reverseAccepted}/${board.panels.length}`;
   el("segmentProgress").textContent=`${index+1} / ${project.segments.length}`; el("toggleComplete").textContent=board.completed?"撤销我的完成确认":(reverseComplete?"完成最后核查并进入结果输出":`成图反查 ${reverseAccepted}/${board.panels.length}`); el("panelPrompt").textContent=buildPanelPrompt(panel,board); el("segmentPrompt").textContent=buildSegmentPrompt(board); el("videoPrompt").textContent=board.video_master_prompt?buildFinalVideoPrompt(board):"本段仍在9宫调试；请逐格查看成图并反向核对对应 Prompt。九格全部由你标记为“对应通过”后，才开放确认主稿的最终导出。"; el("copyVideoPrompt").disabled=!board.video_master_prompt; el("editPrompt").textContent=panel.edit_prompt||"尚未生成"; el("generationState").textContent=board.image_data_url&&board.last_replaced_panel?`${board.last_replaced_panel} 已替换 · 需重新反查`:(board.image_data_url?"九宫格已回填 · 执行成图反查":"Prompt已准备，等待$imagegen");
   const hasEdit=Boolean(panel.expected||panel.actual||panel.change); el("editPanel").classList.toggle("ready",hasEdit); el("editStatus").textContent=hasEdit?`${panel.id} 已预填`:`${panel.id} 待填写`;
   el("reverseProgress").textContent=`${reverseAccepted} / ${board.panels.length} 已通过`;
@@ -552,6 +542,9 @@ async function exportReviewHtml(){
     const cssNode=document.querySelector("style[data-nine-grid-inline-css]");
     const cssLink=document.querySelector('link[rel="stylesheet"][href*="nine-grid.css"]');
     const appNode=document.querySelector("script[data-nine-grid-app]");
+    const coreNode=document.querySelector("script[data-event-core]");
+    const coreText=coreNode?.src?await fetch(coreNode.src,{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("事件核心读取失败");return r.text();}):coreNode?.textContent;
+    if(!coreText)throw new Error("缺少事件核心");
     const cssText=cssNode?cssNode.textContent:await fetch(cssLink.href,{cache:"no-store"}).then(response=>{if(!response.ok)throw new Error(`样式读取失败：HTTP ${response.status}`);return response.text();});
     const appText=appNode?.src?await fetch(appNode.src,{cache:"no-store"}).then(response=>{if(!response.ok)throw new Error(`程序读取失败：HTTP ${response.status}`);return response.text();}):appNode?.textContent;
     if(!appText)throw new Error("未找到工作台程序");
@@ -564,7 +557,7 @@ async function exportReviewHtml(){
       project:snapshot
     };
     const clone=document.documentElement.cloneNode(true);
-    clone.querySelectorAll('link[rel="stylesheet"][href*="nine-grid.css"],style[data-nine-grid-inline-css],script[data-nine-grid-app],#embeddedWorkspace').forEach(node=>node.remove());
+    clone.querySelectorAll('link[rel="stylesheet"][href*="nine-grid.css"],style[data-nine-grid-inline-css],script[data-nine-grid-app],script[data-event-core],#embeddedWorkspace').forEach(node=>node.remove());
     clone.querySelectorAll("input[type=file]").forEach(input=>input.value="");
     const clonedSaveButton=clone.querySelector("#exportReviewHtml");
     if(clonedSaveButton){clonedSaveButton.textContent="保存当前页面 HTML";clonedSaveButton.disabled=false;}
@@ -572,6 +565,7 @@ async function exportReviewHtml(){
     if(clonedStoryboard){if(activeSnapshotBoard?.image_data_url)clonedStoryboard.src=activeSnapshotBoard.image_data_url;else clonedStoryboard.removeAttribute("src");}
     const style=document.createElement("style");style.dataset.nineGridInlineCss="";style.textContent=cssText;clone.querySelector("head").appendChild(style);
     const embedded=document.createElement("script");embedded.id="embeddedWorkspace";embedded.type="application/json";embedded.textContent=JSON.stringify(workspace).replace(/<\/script/gi,"<\\/script");clone.querySelector("body").appendChild(embedded);
+    const core=document.createElement("script");core.dataset.eventCore="";core.textContent=coreText.replace(/<\/script/gi,"<\\/script");clone.querySelector("body").appendChild(core);
     const app=document.createElement("script");app.dataset.nineGridApp="";app.textContent=appText.replace(/<\/script/gi,"<\\/script");clone.querySelector("body").appendChild(app);
     const html=`<!doctype html>\n${clone.outerHTML}`;
     const stem=snapshot.segments.length===1?cleanFileStem(snapshot.segments[0].segment_id):cleanFileStem(snapshot.script_name);
@@ -590,6 +584,8 @@ function buildResultsHtml(payload){
 
 async function exportProject(){
   syncFields();
+  const eventProblems=project.segments.flatMap(board=>NineGridEvents.eventErrors(board).map(problem=>`${board.segment_id}: ${problem}`));
+  if(eventProblems.length){alert(eventProblems.join("\n"));return;}
   if(project.segments.some(board=>!String(board.video_master_prompt||" ").trim())){alert("缺少完整视频主稿。旧项目可继续编辑，但不能从九格重建最终正文；请逐段保存完整主稿。");return;}
   const reviewComplete=project.segments.length>0&&project.segments.every(board=>board.completed&&board.image_data_url&&board.panels.every(panel=>panel.reverse_status==="accepted"));
   if(!reviewComplete){alert("最终核查尚未完成；请逐格查看成图，反向核对对应 Prompt，并将九格全部标记为“对应通过”，再进入结果输出。");return;}
@@ -597,7 +593,7 @@ async function exportProject(){
   try{snapshot=await portableProject();}catch(error){alert(`结果输出失败：${error.message}`);return;}
   const readyBoards=snapshot.segments.filter(board=>board.completed&&board.image_data_url);
   const segments=readyBoards.map((board)=>{
-    const panelMap=board.panels.map(panel=>({panel_id:panel.id,shot_ref:panel.shot_ref,asset_refs:panel.asset_refs,duration:panel.duration,observation_state:panel.observation_state,sample_time:panel.sample_time,meaning:panel.action,performance:panel.performance,emotion_detail:panel.emotion_detail,reverse_validation:{status:panel.reverse_status,image_to_script:panel.reverse_note,script_to_prompt:panel.reverse_prompt_note,checked_at:panel.reverse_checked_at}}));
+    const panelMap=board.panels.map(panel=>({panel_id:panel.id,shot_ref:panel.shot_ref,asset_refs:panel.asset_refs,duration:panel.duration,event_ids:panel.event_ids,observation_state:panel.observation_state,sample_time:panel.sample_time,meaning:panel.action,performance:panel.performance,emotion_detail:panel.emotion_detail,reverse_validation:{status:panel.reverse_status,image_to_script:panel.reverse_note,script_to_prompt:panel.reverse_prompt_note,checked_at:panel.reverse_checked_at}}));
     const changeNotes=board.panels.filter(panel=>panel.expected||panel.actual||panel.change).map(panel=>({panel_id:panel.id,expected:panel.expected,actual:panel.actual,change:panel.change}));
     return {segment_id:board.segment_id,title:board.title,source_range:board.source_range,segment_duration:totalDuration(board),completed:board.completed,generation_state:board.generation_state,event_timeline:board.events,reverse_validation_gate:"9/9 panels passed image→script/timeline→prompt review by user",final_prompt_type:"video_generation",final_video_prompt:buildFinalVideoPrompt(board),video_master_history:board.video_master_history||[],storyboard_reference:{image_name:board.image_name,image_data_url:board.image_data_url,panel_map:panelMap},change_notes:changeNotes};
   });
@@ -623,7 +619,7 @@ el("previousSegment").addEventListener("click",()=>{const index=project.segments
 el("videoMasterInput").addEventListener("change",saveVideoMaster);
 el("saveVideoMaster").addEventListener("click",saveVideoMaster);
 el("nextSegment").addEventListener("click",()=>{const index=project.segments.findIndex(item=>item.segment_id===activeSegmentId);if(index<project.segments.length-1)selectSegment(project.segments[index+1].segment_id);});
-el("toggleComplete").addEventListener("click",()=>{const board=currentBoard();if(!board.completed&&!String(board.video_master_prompt||" ").trim()){alert("请先保存并核对完整视频主稿，包括未入格事件、对白/OS和转场。");return;}if(!board.completed&&!board.image_data_url){alert("请先回填并检视本段九宫格图片。");return;}if(!board.completed){const unresolved=board.panels.filter(panel=>panel.reverse_status!=="accepted");if(unresolved.length){activePanelId=unresolved[0].id;renderPanelSelect();renderHitGrid();loadFields();alert(`最后一道核查尚未完成：还有 ${unresolved.length} 格未标记“对应通过”。已定位到 ${activePanelId}。`);return;}}board.completed=!board.completed;renderSegmentSelect();updateDerived();saveState();});
+el("toggleComplete").addEventListener("click",()=>{const board=currentBoard();if(!board.completed&&NineGridEvents.eventErrors(board).length){alert(NineGridEvents.eventErrors(board).join("\n"));return;}if(!board.completed&&!String(board.video_master_prompt||" ").trim()){alert("请先保存并核对完整视频主稿，包括未入格事件、对白/OS和转场。");return;}if(!board.completed&&!board.image_data_url){alert("请先回填并检视本段九宫格图片。");return;}if(!board.completed){const unresolved=board.panels.filter(panel=>panel.reverse_status!=="accepted");if(unresolved.length){activePanelId=unresolved[0].id;renderPanelSelect();renderHitGrid();loadFields();alert(`最后一道核查尚未完成：还有 ${unresolved.length} 格未标记“对应通过”。已定位到 ${activePanelId}。`);return;}}board.completed=!board.completed;renderSegmentSelect();updateDerived();saveState();});
 el("panelSelect").addEventListener("change",event=>selectPanel(event.target.value));
 Object.values(fields).forEach(field=>{field.addEventListener("input",()=>{syncFields();});field.addEventListener("change",()=>{syncFields();});});
 document.querySelectorAll("[data-reverse-status]").forEach(button=>button.addEventListener("click",()=>setReverseStatus(button.dataset.reverseStatus)));

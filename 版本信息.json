@@ -1,22 +1,22 @@
 {
   "package_name": "fengfeng manju",
   "distribution_name": null,
-  "version": "7.12-unified-design-routing",
-  "build_date": "2026-10-13",
-  "trigger": "9宫",
+  "version": "8.0.0",
+  "build_date": "2026-10-23",
+  "trigger": "$fengfeng-manju",
   "trigger_aliases": [
     "九宫",
     "九宫格",
     "九宫格工作台"
   ],
   "launcher": "启动九宫格.cmd",
-  "entry_document": "9宫.md",
+  "entry_document": "SKILL.md",
   "skill_entry": "SKILL.md",
   "canvas": "assets/open-cowart-canvas/nine-grid.html",
   "default_project": null,
   "default_port": "dynamic-localhost",
   "segments": null,
-  "prompt_transform": "完整剧情 → 视频主稿 → 九宫取样验证 → 分类修正 → 从确认主稿交付",
+  "prompt_transform": "任务路由 → 完整事件底稿 → 按需视听设计 → 编译 → 检查/定向返修 → 交付",
   "workbench_features": [
     "D1-D5项目配置",
     "九个不重复观察状态",
