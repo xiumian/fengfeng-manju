@@ -13,16 +13,52 @@ def project():
                       {'id':'E2','source_ids':['S1'],'start':2,'end':5,'body':'甲保剑并说话','dialogues':[{'id':'D1','speaker':'甲','text':'退后，我不想伤你。','kind':'dialogue'}]},
                       {'id':'E3','source_ids':['S1'],'start':5,'end':12,'body':'甲推退乙，两人站在桥上'}]}
 
+
+COMPLETE = '乙尝试夺剑。\n甲保剑并说话。\n甲说：“退后，我不想伤你。”\n甲推退乙，两人站在桥上。'
+EVENT_PROOF = {'E1':'乙尝试夺剑','E2':'甲保剑并说话','E3':'甲推退乙，两人站在桥上'}
+
+
+def evidence(p, text):
+    proofs = {}
+    for item in p['workflow']['plan']['coverage']:
+        options = [EVENT_PROOF[event] for event in item['event_ids']]
+        options.extend(text.splitlines())
+        proofs[item['id']] = next(quote for quote in options if quote.strip() and quote in text)
+    return proofs
+
+
+def checked_submit(p,module,payload):
+    """Old regression fixtures receive the new contract metadata explicitly.
+    Assertions here remain structural; coverage evidence is not a quality verdict.
+    """
+    payload=copy.deepcopy(payload)
+    task=p['workflow']['plan']['task']
+    if module=='source' and set(payload)=={'checked_event_ids'}:
+        payload['source_coverage']={u['id']:{'event_ids':payload['checked_event_ids'],'reason':'结构回归夹具已登记原段落与事件对应'} for u in w.source_units(p,task)}
+    if module=='compile' and 'text' in payload:
+        text=payload['text'];payload.setdefault('coverage',evidence(p,text))
+        utterances=[];cursor=0
+        for e in w.selected(p,task):
+            for d in e.get('dialogues',[]):
+                a=text.find(d['text'],cursor);b=a+len(d['text']);utterances.append({'id':d['id'],'speaker':d['speaker'],'start':a,'end':b});cursor=b
+        if utterances:payload['utterances']=utterances
+    if module=='validate':
+        text=p.get('video_master_prompt','')
+        if task['mode'] in ('grid','edit_grid'):text='\n'.join(x['prompt'] for x in p.get('panels',[]))+'\n'+text
+        payload.setdefault('coverage',evidence(p,text))
+        payload.setdefault('requirement_reviews',{i:{'status':'met','reason':'此测试逐事件提供可定位的结构证据'} for i in payload['coverage']})
+    return w.submit(p,module,payload,w.context(task,module,p)['receipt'])
+
 class WorkflowTest(unittest.TestCase):
     def setUp(self):
         self.task={'mode':'prompt','features':['action','performance']}
         self.p=w.init(project(),self.task)
     def source(self):
-        self.p=w.submit(self.p,'source',{'checked_event_ids':['E1','E2','E3']})
+        self.p=checked_submit(self.p,'source',{'checked_event_ids':['E1','E2','E3']})
     def designs(self):
         self.source()
-        for m in ['action','performance','camera']:
-            self.p=w.submit(self.p,m,{'design':{e['id']:m+'具体动作与观察设计' for e in self.p['events']}})
+        for m in ['action','performance','sound','camera']:
+            self.p=checked_submit(self.p,m,{'design':{e['id']:m+'具体动作与观察设计' for e in w.context(self.task,m,self.p)['events']}})
     def test_routes(self):
         modules=lambda t:[s['module'] for s in w.plan(t)['steps']]
         self.assertEqual(modules({'mode':'prompt','features':[]}),['source','camera','compile','validate'])
@@ -38,14 +74,14 @@ class WorkflowTest(unittest.TestCase):
         for paths in w.RULES.values():
             for path in paths: self.assertTrue((w.ROOT/path).is_file(),path)
     def test_no_skipping(self):
-        with self.assertRaises(ValueError): w.submit(self.p,'camera',{'design':{}})
+        with self.assertRaises(ValueError): checked_submit(self.p,'camera',{'design':{}})
     def test_upstream_write_rejected_atomically(self):
         self.source();before=copy.deepcopy(self.p)
-        with self.assertRaises(ValueError): w.submit(self.p,'action',{'design':{},'events':[]})
+        with self.assertRaises(ValueError): checked_submit(self.p,'action',{'design':{},'events':[]})
         self.assertEqual(self.p,before)
     def test_unknown_event_design(self):
         self.source()
-        with self.assertRaises(ValueError): w.submit(self.p,'action',{'design':{'E9':'不允许'}})
+        with self.assertRaises(ValueError): checked_submit(self.p,'action',{'design':{'E9':'不允许'}})
     def test_missing_source(self):
         p=project();p['events'][0]['source_ids']=['not-found']
         with self.assertRaises(ValueError): w.init(p,self.task)
@@ -68,20 +104,20 @@ class WorkflowTest(unittest.TestCase):
     def test_compile_preserves_dialogue(self):
         self.designs()
         payload={'text':'甲推退乙。','event_ids':['E1','E2','E3'],'dialogue_ids':['D1']}
-        with self.assertRaises(ValueError):w.submit(self.p,'compile',payload)
-        payload['text']='甲说：“退后，我不想伤你。”甲推退乙。'
-        self.p=w.submit(self.p,'compile',payload)
+        with self.assertRaises(ValueError):checked_submit(self.p,'compile',payload)
+        payload['text']=COMPLETE
+        self.p=checked_submit(self.p,'compile',payload)
         self.assertIn('退后，我不想伤你。',self.p['video_master_prompt'])
     def test_missing_event(self):
         self.designs()
-        with self.assertRaises(ValueError):w.submit(self.p,'compile',{'text':'退后，我不想伤你。','event_ids':['E1'],'dialogue_ids':['D1']})
+        with self.assertRaises(ValueError):checked_submit(self.p,'compile',{'text':'退后，我不想伤你。','event_ids':['E1'],'dialogue_ids':['D1']})
     def test_repair_preserves_history_and_invalidates_downstream(self):
         self.designs();before=copy.deepcopy(self.p['events'])
         self.p=w.repair(self.p,'action','动作支撑无法完成，需要改编排')
         self.assertEqual([r['module'] for r in self.p['workflow']['results']],['source'])
-        self.assertEqual(len(self.p['workflow']['history'][0]['invalidated']),3)
+        self.assertEqual(len(self.p['workflow']['history'][0]['invalidated']),4)
         self.assertEqual(self.p['events'],before)
-        with self.assertRaises(ValueError):w.submit(self.p,'camera',{'design':{}})
+        with self.assertRaises(ValueError):checked_submit(self.p,'camera',{'design':{}})
     def test_repair_budget(self):
         self.source()
         for i in range(2):
@@ -89,41 +125,41 @@ class WorkflowTest(unittest.TestCase):
             self.source()
         with self.assertRaises(ValueError):w.repair(self.p,'source','再来一次')
     def test_sampling_does_not_replace_events(self):
-        p=project();p['video_master_prompt']='完整主稿'
-        task={'mode':'grid'};p=w.init(p,task);p=w.submit(p,'source',{'checked_event_ids':['E1','E2','E3']})
+        p=project();p['video_master_prompt']=COMPLETE
+        task={'mode':'grid'};p=w.init(p,task);p=checked_submit(p,'source',{'checked_event_ids':['E1','E2','E3']})
         before=copy.deepcopy(p['events'])
-        panels=[{'id':f'P{i}','event_ids':['E1'],'sample_time':i/8,'prompt':'甲乙交锋的不同观察状态'} for i in range(9)]
-        p=w.submit(p,'sampling',{'panels':panels})
+        panels=[{'id':f'P{i}','event_ids':['E1'],'sample_time':i/8,'prompt':f'甲乙交锋的观察状态 {i}'} for i in range(9)]
+        p=checked_submit(p,'sampling',{'panels':panels})
         self.assertEqual(p['events'],before)
         self.assertEqual(len(p['panels']),9)
     def test_bad_sample(self):
-        p=project();p['video_master_prompt']='完整主稿';p=w.init(p,{'mode':'grid'});p=w.submit(p,'source',{'checked_event_ids':['E1','E2','E3']})
-        with self.assertRaises(ValueError):w.submit(p,'sampling',{'panels':[{'id':str(i),'event_ids':['E1'],'sample_time':99,'prompt':'越界'} for i in range(9)]})
+        p=project();p['video_master_prompt']=COMPLETE;p=w.init(p,{'mode':'grid'});p=checked_submit(p,'source',{'checked_event_ids':['E1','E2','E3']})
+        with self.assertRaises(ValueError):checked_submit(p,'sampling',{'panels':[{'id':str(i),'event_ids':['E1'],'sample_time':99,'prompt':'越界'} for i in range(9)]})
     def test_workbench_bridge_requires_planning_then_preserves_events(self):
-        p=project();p['video_master_prompt']='完整主稿';p=w.init(p,{'mode':'grid'})
+        p=project();p['video_master_prompt']=COMPLETE;p=w.init(p,{'mode':'grid'})
         with self.assertRaises(ValueError):w.to_workbench(p)
-        p=w.submit(p,'source',{'checked_event_ids':['E1','E2','E3']})
-        p=w.submit(p,'sampling',{'panels':[{'id':f'P{i}','event_ids':['E1'],'sample_time':i/8,'prompt':'不同的采样状态'} for i in range(9)]})
-        p=w.submit(p,'validate',{'content_checked':True,'evidence':{e['id']:'主稿与采样映射有具体核对证据' for e in p['events']},'limitations':['尚未出图']})
+        p=checked_submit(p,'source',{'checked_event_ids':['E1','E2','E3']})
+        p=checked_submit(p,'sampling',{'panels':[{'id':f'P{i}','event_ids':['E1'],'sample_time':i/8,'prompt':f'不同的采样状态 {i}'} for i in range(9)]})
+        p=checked_submit(p,'validate',{'content_checked':True,'evidence':{e['id']:'主稿与采样映射有具体核对证据' for e in p['events']},'limitations':['尚未出图']})
         output=w.to_workbench(p);board=output['segments'][0]
         self.assertEqual(board['events'],p['events']);self.assertEqual(len(board['panels']),9)
         self.assertFalse(board['completed']);self.assertEqual(board['image_data_url'],'')
     def test_single_panel_preserves_others(self):
-        p=project();p['video_master_prompt']='完整主稿';p['panels']=[{'id':f'P{i}','event_ids':['E1'],'sample_time':1,'prompt':'原图'} for i in range(9)]
+        p=project();p['video_master_prompt']=COMPLETE;p['panels']=[{'id':f'P{i}','event_ids':['E1'],'sample_time':1,'prompt':'原图'} for i in range(9)]
         task={'mode':'edit_grid','target_panel_id':'P3','image_version':'v1','coordinates':[0,0,100,100]}
-        p=w.init(p,task);p=w.submit(p,'source',{'checked_event_ids':['E1','E2','E3']})
-        old=copy.deepcopy(p['panels']);p=w.submit(p,'sampling',{'panels':[{'id':'P3','event_ids':['E1'],'sample_time':1,'prompt':'仅改此格'}]})
+        p=w.init(p,task);p=checked_submit(p,'source',{'checked_event_ids':['E1','E2','E3']})
+        old=copy.deepcopy(p['panels']);p=checked_submit(p,'sampling',{'panels':[{'id':'P3','event_ids':['E1'],'sample_time':1,'prompt':'仅改此格'}]})
         self.assertEqual([x for x in p['panels'] if x['id']!='P3'],[x for x in old if x['id']!='P3'])
     def test_validation_needs_evidence(self):
-        self.designs();self.p=w.submit(self.p,'compile',{'text':'退后，我不想伤你。','event_ids':['E1','E2','E3'],'dialogue_ids':['D1']})
-        with self.assertRaises(ValueError):w.submit(self.p,'validate',{'content_checked':True,'evidence':{},'limitations':[]})
-        self.p=w.submit(self.p,'validate',{'content_checked':True,'evidence':{i:'正文与原文已逐项核对的证据记录' for i in ('E1','E2','E3')},'limitations':['未成片']})
+        self.designs();self.p=checked_submit(self.p,'compile',{'text':COMPLETE,'event_ids':['E1','E2','E3'],'dialogue_ids':['D1']})
+        with self.assertRaises(ValueError):checked_submit(self.p,'validate',{'content_checked':True,'evidence':{},'limitations':[]})
+        self.p=checked_submit(self.p,'validate',{'content_checked':True,'evidence':{i:'正文与原文已逐项核对的证据记录' for i in ('E1','E2','E3')},'limitations':['未成片']})
         self.assertEqual(self.p['workflow']['status'],'text_checked')
     def test_revision_preserves_other_sections(self):
         p=project();p['master_sections']={'E1':'旧第一段','E2':'旧第二段','E3':'旧第三段'}
         task={'mode':'revise','scope':['E2'],'features':[]};p=w.init(p,task)
-        p=w.submit(p,'source',{'checked_event_ids':['E2']});p=w.submit(p,'camera',{'design':{'E2':'保持当前双人关系景，连续动作'}})
-        p=w.submit(p,'compile',{'text':'新第二段：退后，我不想伤你。','event_ids':['E2'],'dialogue_ids':['D1']})
+        p=checked_submit(p,'source',{'checked_event_ids':['E2']});p=checked_submit(p,'performance',{'design':{'E2':'说话时保留甲的声音归属与原句'}});p=checked_submit(p,'sound',{'design':{'E2':'只发声一次，画内对白'}});p=checked_submit(p,'camera',{'design':{'E2':'保持当前双人关系景，连续动作'}})
+        p=checked_submit(p,'compile',{'text':'新第二段：退后，我不想伤你。','event_ids':['E2'],'dialogue_ids':['D1']})
         self.assertEqual(p['master_sections']['E1'],'旧第一段');self.assertEqual(p['master_sections']['E3'],'旧第三段')
         self.assertIn('新第二段',p['video_master_prompt'])
 

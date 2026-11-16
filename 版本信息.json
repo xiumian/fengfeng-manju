@@ -1,8 +1,8 @@
 {
   "package_name": "fengfeng manju",
   "distribution_name": null,
-  "version": "8.0.0",
-  "build_date": "2026-10-23",
+  "version": "8.2.0",
+  "build_date": "2026-11-16",
   "trigger": "$fengfeng-manju",
   "trigger_aliases": [
     "九宫",

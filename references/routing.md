@@ -1,19 +1,21 @@
 # 调度协议
 
-## 语义判定与程序分工
-模型按当前用户意图选择mode与features，不用词语命中判定授权。不确定“讨论还是执行修改”时先保持讨论。程序验证结构并根据显式字段确定路线，无法判断字段是否忠实于用户；必须人工/模型核对。
+## 语义识别与程序补调
+模型先读取完整来源，提取事件、对白、约束和逐事件能力需求。当前用户意图决定mode，不用关键词推断维护授权。用户不必列模块；features是提示，程序会结合底稿结构和需求清单补调。
 
-任务JSON：`{"mode":"prompt","features":["action","performance"],"scope":[],"reason":"含实体攻防和对白；只交付文字"}`。
-mode：prompt新主稿、revise局改、grid已有主稿九宫、edit_grid单格修图、workbench保存恢复、discuss技能讨论、maintain技能维护。
-features：action实体接触、performance对白或关键反应、vfx法术/变身、assets已有资产库、sound复杂OS/VO/声画设计。无对应需求不选。
-scope是事件ID列表；空列表表示全稿。局改必须给scope。全局身份/世界规则改变时按真实依赖扩大范围，不机械只读邻段。
+任务JSON例：`{"mode":"prompt","features":[],"scope":[],"reason":"含对白和动作；请由底稿核对专业需求"}`。
+mode：prompt主稿、revise单事件局改、grid已有主稿九宫、edit_grid单格修改、workbench保存恢复、discuss技能讨论、maintain明确授权的维护。
+features：action/performance/vfx/assets/sound。程序从登记对白补表演和声音，从事件需求或保守声响信号补声音；从events.requires和requirements补能力；少量攻防/法术词只作保守补调信号，不代表自然语言理解，也不能以无命中判定无需模块。模型必须逐事件检查特殊需求。
 
-## 路线与交接
-prompt/revise：source底稿 → 按features选择assets/action/performance/vfx/sound → camera → compile → validate。
-grid/edit_grid：source核对已有事件与主稿 → 按需assets → sampling → validate；没有主稿不能从图反推，先另行走prompt。
-workbench：workbench → validate；内容修改另走相应路线。discuss仅返回讨论，不写入。maintain必须有明确授权记录，只进入maintenance。
-程序将每步所需模块及原因写入计划；单步骤context返回当前规则、所选事件、相邻状态、必要全局约束和上游模块记录。简单任务一次创作内完成交接也可以，不要求每专业单独推理或重抄底稿。
+## 路线
+prompt/revise：source → 按底稿与需求覆盖补齐assets/action/performance/vfx/sound → camera → compile → validate。
+grid/edit_grid：source → 必要assets → sampling → validate。已有主稿的动作由主稿核对，不强制重新设计；无主稿先走prompt。
+workbench：workbench → validate。discuss只讨论；maintain读取维护制度并登记明确授权，不由程序自行改代码。
 
-实际输出用submit写入当前工序。结构不合格阻断该次写入；内容问题用repair退回当前或上游工序，保留失效记录。默认两轮定向返修，仍无法解决则报告具体阻碍，不无限循环或伪装完成。没有调用另一执行者不得称独立评审。
+## 执行中补调
+当前模块发现遗漏需求，用discover提交需求ID、kind、description、source_ids、event_ids、source_quote及原因。引用必须存在于源文，不能借补调新增剧情或能力。多项同时发现就批量登记。
+程序重建计划，保留共同且有效的上游结果；新增/受影响的工序起及其下游失效并存档。不能拿旧摄影/编译结果绕过刚补入的动作或声音工序。补调与返修共享最多两轮预算，耗尽则明确未解决内容，不能静默删需求。
 
-工序只取得该工序规则，不递归展开链接。链接是专项查询入口；例如vfx需要具体招式才查索引与命中类别，camera不自动加载表演和整库。旧文件若与当前归属冲突，按项目契约及当前模块处理，必要时报告冲突。
+## 读取与提交
+context返回实际规则文件、专业分配的事件、必要前后状态、需求覆盖表及上游结果。已声明具体事件覆盖时，专业模块只提交这些事件，并附版本回执。submit必须携带当前context文件；上游、需求、规则或返修轮次变化后重新取context。回执只能证明与当前提供的规则包一致，不能证明模型真正理解或执行了文字。
+需求引用通过不等于语义落实。全稿任务的 source 核对全部来源的每个非空段落，局部任务核对关联来源，compile与validate分别给出每项需求的实际正文位置，最终仍对照原文检查。详见coverage-contract.md。

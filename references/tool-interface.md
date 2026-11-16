@@ -1,27 +1,26 @@
-# 工具接口
+# 工具接口（8.2）
 
-在技能根目录执行，Python 3，无第三方依赖。命令只读输入文件，`--out`写新版本，不覆盖输入。程序不调用模型；模型完成语义判断、创作和内容复核。
+Python 3，无第三方运行依赖。输入只读，--out写新版本，不能覆盖输入。语义识别、设计和复核由模型完成，程序不调用模型服务。
 
 ```text
-python scripts/workflow.py plan task.json
+python scripts/workflow.py plan task.json --project project.json
 python scripts/workflow.py init project.json task.json --out run-01.json
-python scripts/workflow.py context task.json source --project run-01.json
-python scripts/workflow.py submit run-01.json source source-result.json --out run-02.json
-python scripts/workflow.py repair run-05.json camera "接触点被遮挡，退回摄影" --out run-06.json
+python scripts/workflow.py context task.json source --project run-01.json --out source-context.json
+python scripts/workflow.py submit run-01.json source source-result.json --context source-context.json --out run-02.json
+python scripts/workflow.py discover run-02.json discovered.json --out run-03.json
+python scripts/workflow.py repair run-05.json camera "反应看不清，改摄影" --out run-06.json
 python scripts/workflow.py check run-06.json
 python scripts/workflow.py workbench-json grid-checked.json --out workbench-project.json
 ```
 
-source提交`{"checked_event_ids":["E1"]}`；专业模块提交`{"design":{"E1":"具体执行设计"}}`；compile提交`{"text":"完整正文","event_ids":["E1"],"dialogue_ids":[]}`；validate提交`{"content_checked":true,"evidence":{"E1":"正文具体片段＋核对理由"},"limitations":["未生成视频"]}`。
+source：checked_event_ids、source_coverage（源文行ID→event_ids/reason）；专业模块：design（事件ID→设计）。
+compile：text、event_ids、dialogue_ids、coverage；有台词还需utterances（id/speaker/start/end，最后两项是正文字符位置）。
+validate：content_checked、evidence、coverage、requirement_reviews、limitations。coverage对应完整需求表，值为正文确切引文或字符范围；不能用笼统引用掩盖未完成内容。
+discover：reason、requirements数组，元素含id/kind/description/source_ids/event_ids/source_quote。只补处理环节，不改原文事实。
 
-模块结果只能按计划顺序submit；失败不会写出新项目。调用context取得当前工序规则和范围内事件，再使用上游结果创作。步骤列表和reason就是调度记录；workflow.results/history是实际交接与返修记录，不以计划代替执行。
+每次submit先取当前context，使用--context交接；规则、源文、计划或上游有变，旧回执将失效。programmatic API submit的第四参数为context返回的receipt。哈希不是用户认证，也不证明模型已理解规则。maintain仍需明确授权记录，不能用补调路径扩权。
 
-局改必须已有按事件分开的master_sections与可选master_prefix。当前程序每个revise任务修改一个事件；多事件按任务拆开，必要时另建全稿任务。程序保留其他事件原文并重组正文，不猜测旧正文的段落边界。上游事实变化时存旧版本、重建任务；不偷偷覆盖。
+局改需要master_sections，每任务一个事件；多事件另分任务或走全稿。九宫只写panels（id/event_ids/sample_time/prompt），grid九格，edit_grid目标一格。真实出图和用户接受另行进行。
 
-九宫结果提交`panels`数组，元素含id/event_ids/sample_time/prompt；grid为9格，edit_grid仅目标1格。输出仅是采样提示词，状态为等待真实图片与用户接受，不自动生图、回填或标媒体通过。
-
-完整grid规划通过后，workbench-json将完整事件、原文、主稿与9采样转换成网页可导入格式；不把未生成图像或用户接受状态伪造为完成。局部scope不能直接导出整板。
-
-维护的authorization记录不是认证系统，不能靠脚本推断人类同意。maintain仅提供规则和记录接口，不执行文件改写。
-
-检验：`python -m unittest discover -s tests -p "test_*.py"`；`node --test tests/event-core.test.cjs`。这些检查不证明生成质量。具体完整事件JSON及串跑脚本见examples/layered-12s-project.json和tests/run_sample.py。
+旧8.0/8.1运行项目重新init，旧记录保存在workflow_archives；不要直接手改contract_version绕过迁移。
+回归：python -m unittest discover -s tests -p "test_*.py"；node --test tests/event-core.test.cjs；保存样例的CLI串跑：python tests/run_sample.py <独立输出目录>。这些不代表成片验证。
