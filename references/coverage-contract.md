@@ -6,6 +6,7 @@
 事件可声明`requires:["action","performance","vfx","assets","sound"]`中适用项。复杂要求单列：
 `{"id":"R1","kind":"sound","description":"收据展开声与揭示对应","source_ids":["S1"],"event_ids":["E1"],"source_quote":"原文中的确切相关句子"}`。
 kind还支持plot/constraint/dialogue/performance/action/vfx/asset/camera。普通剧情约束交compile；专业需求交相应模块。只验证已确认主稿的九宫任务，除资产外由sampling承接，不重复创作。
+可选specialties数组登记明确需要的方法，ID及kind对应关系见[专项登记](specialty-selection.md)。程序拒绝未知、重复、错专业或非数组声明，实际context装入对应全文并纳入规则回执。专项仍使用同一需求ID与正文证据，不另立平行覆盖清单。
 
 ## 来源反查
 source的source_coverage必须包含当前范围的每个非空行ID。全稿范围覆盖全部登记来源，来源未关联到事件时必须先核对和补齐底稿，再继续，例如S1:L1，记录event_ids和reason。context提供源文与这些行的字符位置。背景、约束与戏剧事件都要说明怎样作用于关联事件，不把难处理的原句标成无关而删除。
@@ -18,7 +19,8 @@ compile和validate的coverage映射必须覆盖当前全部需求ID。值可以�
 
 ## 缺口怎样处理
 漏模块但事实已在源文：discover补需求、重排工序；过程错误：repair；事实确实缺失：在已有创作权限内明确设计，忠实改编的关键未知则只暂停依赖部分并询问。不能给无依据能力伪造source_quote。
+缺剧情回[创作准备](creation-preparation.md)形成带补充记录的新底稿；不在专业design里直接改事实。已登记事实只缺专项时可用discover追加细化需求和specialties，沿用原文引句与现有失效机制。
 新需求和旧计划均有历史记录。新增模块能调用后，必须重新读取新上下文并执行，旧回执无效。模块层是包内专业规则；未实现对其他独立skill的自动递归调用，不能把内部模块执行记录冒充外部技能已读取。
 
 ## 版本迁移与边界
-8.0运行JSON先另存旧版，再init为8.1；旧workflow进入workflow_archives，不静默沿用旧通过状态。事件、原文、主稿不因迁移重建为九格。自然语言需求识别和语义检查仍是模型职责；程序回执、结构通过和证据存在都不证明成片质量。
+8.0/8.1运行JSON先另存旧版，再init为当前8.2合同；旧workflow进入workflow_archives，不静默沿用旧通过状态。8.2.1的specialties为可选字段，旧底稿不必补空数组；但本版修改了规则注册表，已有8.2.0的workflow也需重新init并归档，旧底稿兼容不等于旧运行状态可直接续跑。运行中由discover补专项会自动失效相关下游；改规则内容后重新取context，已完成工序需修订时走repair，若程序提示计划变化则重新init，不沿用旧通过状态。事件、原文、主稿不因迁移重建为九格。自然语言需求识别和语义检查仍是模型职责；程序回执、结构通过和证据存在都不证明成片质量。

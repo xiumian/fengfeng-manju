@@ -4,6 +4,7 @@ Signals are conservative hints, not semantic comprehension or proof of completen
 """
 import copy
 import re
+from workflow_rules import validate_specialties
 
 KINDS = {'plot', 'constraint', 'dialogue', 'performance', 'action', 'vfx', 'asset', 'sound', 'camera'}
 FEATURE_MAP = {'dialogue':'performance','performance':'performance','action':'action','vfx':'vfx','asset':'assets','sound':'sound','camera':'camera'}
@@ -51,6 +52,7 @@ def inventory(project, task):
     for item in project.get('requirements', []):
         need(isinstance(item,dict), 'requirement must be object')
         need(isinstance(item.get('id'),str) and item['id'] and item.get('kind') in KINDS, 'requirement id/kind invalid')
+        validate_specialties(item['kind'], item.get('specialties', []))
         need(isinstance(item.get('description'),str) and item['description'].strip(), 'requirement description missing')
         need(isinstance(item.get('event_ids'),list) and item['event_ids'] and set(item['event_ids'])<=known,'requirement has unknown events')
         need(isinstance(item.get('source_ids'),list) and item['source_ids'] and set(item['source_ids'])<=source_ids,'requirement has unknown sources')

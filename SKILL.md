@@ -2,7 +2,7 @@
 name: fengfeng-manju
 description: 将小说、剧本或创意与资产转为完整中文视频提示词，设计动作、表演、特效与镜头；按需九宫验证、单格修图和工作台保存。
 metadata:
-  version: '8.2.0'
+  version: '8.2.1'
 ---
 
 # fengfeng manju｜分层生产
@@ -10,9 +10,22 @@ metadata:
 先区分制作作品、修改作品、讨论技能、修改技能。讨论、提想法和要求方案不修改技能文件；明确授权后的维护读[维护制度](maintenance/change-control.md)。
 
 ## 开始当前任务
-读[调度协议](references/routing.md)，将本次需求解析成任务JSON，运行 `python scripts/workflow.py plan task.json --project project.json`，再init建立运行版本。底稿必须包含完整来源、事件与必要约束；不要只靠features手填决定模块。随后用context读取当前模块，把上下文文件通过submit的`--context`交接；不递归读取全库。Python用环境中可用的Python 3。
+讨论只解释，不建立生产工程；维护进入维护制度。制作或改编先读[创作准备契约](references/creation-preparation.md)，区分忠实改编、授权扩写与仅补拍法，先形成完整剧本或事件底稿；只要求扩写就交付剧本并停止。
+
+需要提示词或九宫时再读[调度协议](references/routing.md)，将本次需求解析成任务JSON，运行 `python scripts/workflow.py plan task.json --project project.json`，再init建立运行版本。底稿必须包含完整来源、事件与必要约束；不要只靠features手填决定模块。随后用context读取当前模块，把上下文文件通过submit的`--context`交接；不递归读取全库。Python用环境中可用的Python 3。
 
 生产由程序选路、检查交接与记录状态，由模型执行创作。程序不调用收费模型，不声称自动理解原文或验证画面。按交付停止，简单任务不强制全流程、九宫或多代理。
+
+六项前置创作（剧情、对白关系、造型、空间、美术材质、灯光色彩）先按[创作准备](references/creation-preparation.md#六项前置创作判断与输出)分清已定/可补/不适用，决定进入sources/globals/requirements；负责模块实际加载方法，编译/复核逐项兑现，不默认新增剧情或把设计只留在聊天。
+
+## 创作决策优先级
+分开处理[整场推进](references/scene-rhythm-planning.md)与[单镜节奏](references/shot-rhythm-planning.md)：前者安排压力/转折，后者按动作节点、信息可读性和前后承接选择切点；允许0.5秒短镜头，不固定镜长，长镜须有持续观看收益。
+整场制作先按[整场节奏规划](references/scene-rhythm-planning.md)确定剧情推进、强弱变化、转折与时间预算，再形成镜头；不固定九段或机械均分，也不以镜头数替代节奏方案。
+按“主人要求与已定剧情 → 戏剧目的 → 观看重点 → 视听方案 → 可执行性 → 防漏交付”组织创作，具体执行见[专业职责中的决策顺序](references/design-boundaries.md#创作决策顺序)。这是创作推导顺序，不改变工序调用顺序；权限、事实与物理/设定条件始终约束方案。连续性检查不代替导演设计，不默认用少切镜、固定机位或删细节降低出错风险，也不反向规定多切镜更好。
+
+招式、粒子与复杂特效按[联合设计与保真方法](references/move-vfx-design.md)执行：关键视觉变化先登记到有来源的需求并安排观看预算；动作/特效落实形成与层间联动，摄影兑现展示，编译保留过程，复核逐项对照引句而非只查层名；普通小招按需取用，不统一堆层。
+
+声音按[分层音效](references/layered-sound-design.md)落实并输出动作层/特效层/环境层及同步、主次与跨镜承接，不把音效缩成素材名摘要；不存在的声层不硬填。
 
 ## 全程边界
 - 原文与用户确认决定事实；设计补充单独记录。对白/OS、因果、结果与未入格事件不静默删除。
@@ -22,5 +35,8 @@ metadata:
 - 制作权限不包含修改技能、生成付费视频或发布。作品内已授权步骤自主推进，关键歧义才询问。
 
 需求清单、自动补调与逐项回查见[覆盖协议](references/coverage-contract.md)。
+专业决策与协作边界见[专业职责](references/design-boundaries.md)；模型逐事件判断专项需求，按[专项登记](references/specialty-selection.md)交给程序装入，不把关键词无命中当作无需专项。
 
 交接结构见[项目契约](references/project-contract.md)，程序命令见[工具接口](references/tool-interface.md)，工作台任务才读[工作台](references/workbench-v8.md)。历史入口、旧分镜资料与案例只显式查阅，不覆盖现行规则。
+
+情绪覆盖静默、动作、声音和环境，不只对白；按[全域情绪与表情方法](references/emotion-performance-design.md)落实局部表情、身体任务、混合/掩饰及跨镜残留，编译和复核保留具体线索。

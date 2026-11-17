@@ -1,82 +1,24 @@
-# Expression Cue Library
+# 表情专项：可表演的面部变化
 
-Use these as selectable ingredients, not mandatory bundles. Choose 2-4 channels for one short beat and adapt them to character, genre, and intensity.
+总体轨迹见[全域情绪方法](emotion-performance-design.md)。本页按需加载，不固定通道数，不默认克制，不测谎，不保证模型精确控制。微小动作不全称微表情。
 
-## Cue combinations
+## 可选线索与连接
 
-| Inner state | Restrained visible cues | Possible mask or recovery |
+|部位|可见变化|如何避免误用|
 |---|---|---|
-| Suppressed sadness | gaze drops or drifts away; lower lip firms; swallow; shallow inhale | faint uneven smile; look back only after a pause |
-| Suspicion | gaze pauses on the target; eyes narrow slightly; one brow rises; head tilts a few degrees | brow releases while gaze remains fixed |
-| Sudden fear | eyelids open slightly; breath stops; lips part; shoulders briefly freeze | controlled exhale; jaw firms; body stays still |
-| Restrained anger | jaw tightens; nostrils widen slightly; gaze locks; speech starts after a pause | slow exhale; lips press together; posture becomes still |
-| Guilt or evasion | gaze leaves the listener; blink rate briefly changes; lips moisten; answer is delayed | brief polite smile; eyes return late |
-| Concealed pleasure | eyes soften first; one mouth corner rises briefly; breath releases | smile is suppressed and face settles |
-| Disgust | nose wrinkles faintly; upper lip lifts briefly; head withdraws a little | face smooths while distance is maintained |
-| Hurt disguised as calm | gaze freezes; smile stalls; inhale catches; chin draws inward | deliberate blink; neutral expression returns too carefully |
-| Sleepiness to alertness | head slightly lowered; jaw loose; eyelid twitch; eyes open to a slit; gaze shifts before head | jaw firms; head turns slightly; listening posture |
-| Recognition | gaze fixes; blink stops briefly; brows lift a fraction; lips almost form a word | restrained inhale; expression softens or hardens by context |
+|注视|从对方面部移到手、出口；追随或停住；从游离转为聚焦|注明对象/方向/触发，不凭回避断言内心|
+|眉眼|内眉聚起后松开，单侧略抬，下眼睑收紧，上眼睑打开|和任务/识别相连，不统一恐惧瞪眼或怀疑挑眉|
+|眨眼|一次主动闭眼后重看、被刺激打断、恢复原节律|不写持续机械闪动，不强制眼先动头后动|
+|口角与唇|笑意起到一半停住、一侧先松、想发声又闭口、原笑渐退|不对称不是假笑证明；口型随真实台词|
+|下颌脸颊|咬紧后释放、原有支撑松开、起声前张力改变|区分用力/寒冷/疼痛和已有情绪依据，不全脸绷紧|
+|头颈呼吸|短吸气唇轻开、呼出后下颌松、做事时只移眼不回头|不每次屏息吞咽；头转速度服从当前任务|
 
-## Channel vocabulary
+## 过程与强度
 
-### Eyes and gaze
+先给已有状态，再写触发、变化和必要控制/后续。例如剧情已有认出旧物但想隐藏：指尖触到划痕时视线停住，原笑容一侧短暂失去支撑；对方转来前按原方向放回旧物，继续手上任务。不推广为认出必眨眼吞咽抿嘴。
 
-- pauses on
-- shifts toward
-- avoids
-- loses focus briefly
-- returns late
-- locks onto
-- tracks without moving the head
+强度随题材、人物、关系和观看条件选择：几乎无反应、清楚面部变化、身体带动或哭喊均可成立，不用最低强度作为唯一原则。远景可读姿态/距离，不要求遥远嘴角可见；重要细节被遮挡或时长不足，回摄影/编排协调，不直接锁定特写或定机。
 
-### Eyelids and brows
+## 纠错
 
-- eyelids twitch once
-- eyes open to a narrow slit
-- blink rhythm briefly quickens or slows
-- lower eyelids tighten slightly
-- brow gathers faintly
-- one brow rises a fraction
-
-### Mouth and jaw
-
-- lips press together
-- lower lip firms
-- one mouth corner rises briefly
-- smile becomes slightly asymmetric
-- jaw tightens then releases
-- lips part without speaking
-
-### Breath and body
-
-- breath catches
-- shallow inhale
-- controlled exhale
-- swallow becomes visible
-- shoulders stiffen briefly
-- fingers tighten around a prop
-- head turns only after the eyes move
-
-## Intensity ladder
-
-Use the lowest level that communicates the beat:
-
-1. `trace`: detectable mainly in close-up; one brief cue.
-2. `restrained`: 2-3 coordinated cues; suitable default for cinematic acting.
-3. `clear`: cues last longer or affect posture; use when camera is wider.
-4. `overt`: crying, shouting, recoil, or large gesture; use only when script-confirmed.
-
-## Common failures and fixes
-
-| Failure | Likely cause | Fix |
-|---|---|---|
-| Poker face | abstract emotion only | add a trigger and an ordered change in eyes, breath, or jaw |
-| Overacting | too many cues or strong adjectives | limit to 2-4 channels and use restrained intensity |
-| Mechanical blinking | repeated timing instruction | specify one meaningful blink or only a temporary rhythm change |
-| Random gaze | no target or direction | name the person, object, or sound source |
-| Sudden head snap | no intermediate beat | move eyes first, pause, then turn the head slightly |
-| Frozen listener | prompt covers only speaker | add one limited listener reaction |
-| Expression unreadable | shot too wide or camera too busy | use medium close-up or close-up and hold the camera |
-| Prop teleportation | prop omitted after performance description | repeat prop owner, position, and unchanged state |
-
-Do not claim that generated cues are reliable psychological diagnosis or scientifically verified involuntary microexpressions. Use them as screen-performance language.
+只有情绪词→补对象/触发/具体改变；满脸小动作→留当前有效线索，不缩到固定数量；全程中性→先判断是否真需变化，不硬加；反应过早→核对感知时点；每镜重演→继承收到的信息；口型与紧闭双唇冲突→协调实际台词；强表演被默认否定→回题材与目标。AU代码/角度/毫秒数不能替代可见过程，无工具支持不声称精准执行。此页是原创表演语言，未成片实测，不是科学微表情识别结论。

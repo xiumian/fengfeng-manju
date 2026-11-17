@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 MODES = {'prompt', 'revise', 'grid', 'edit_grid', 'workbench', 'discuss', 'maintain'}
 FEATURES = set(DESIGN) - {'camera'}
 CONTRACT_VERSION = '8.2'
-RULES_VERSION = '8.2.0'
+RULES_VERSION = '8.2.1'
 
 
 def require(ok, message):
@@ -80,8 +80,13 @@ def stage_events(project, task, module, coverage):
 
 def stage_rules(project, task, module, coverage):
     events = stage_events(project, task, module, coverage)
-    relevant = [item['description'] for item in coverage if item['owner'] == module]
-    return select_rules(module, events, [*project.get('constraints', []), *relevant])
+    relevant = [item for item in coverage if item['owner'] == module]
+    # Grid/workbench routes remap coverage owners without reopening specialist design.
+    specialties = (list(dict.fromkeys(s for item in relevant for s in item.get('specialties', [])))
+                   if module in DESIGN else [])
+    return select_rules(module, events,
+                        [*project.get('constraints', []), *(item['description'] for item in relevant)],
+                        specialties=specialties)
 
 
 def validate_project(project):
@@ -148,8 +153,8 @@ def context(task, module, project=None):
     rules, candidates = (stage_rules(project, task, module, route['coverage'])
                          if project is not None else select_rules(module))
     result = {'module': module, 'task': task, 'rules': rules}
-    if module == 'vfx':
-        result['vfx_candidates'] = candidates
+    if module in ('action', 'vfx'):
+        result[module + '_candidates'] = candidates
     if project is not None:
         w = state(project)
         require(w['plan']['task'] == task, 'task differs from active workflow')

@@ -1,0 +1,584 @@
+{
+  "version": "2.0",
+  "entries": [
+    {
+      "id": "ACT-0101",
+      "name": "试探逼位",
+      "category": "徒手交锋",
+      "keywords": [
+        "徒手",
+        "试探",
+        "逼位"
+      ],
+      "file": "01_徒手交锋.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0102",
+      "name": "格挡转向",
+      "category": "徒手交锋",
+      "keywords": [
+        "徒手",
+        "格挡",
+        "卸开"
+      ],
+      "file": "01_徒手交锋.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0103",
+      "name": "落空续接",
+      "category": "徒手交锋",
+      "keywords": [
+        "徒手",
+        "落空",
+        "连贯"
+      ],
+      "file": "01_徒手交锋.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0104",
+      "name": "近身分离",
+      "category": "徒手交锋",
+      "keywords": [
+        "徒手",
+        "贴身",
+        "分离"
+      ],
+      "file": "01_徒手交锋.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0201",
+      "name": "刀剑交错",
+      "category": "刀剑交锋",
+      "keywords": [
+        "刀剑",
+        "交错",
+        "兵刃"
+      ],
+      "file": "02_刀剑交锋.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0202",
+      "name": "压刃脱离",
+      "category": "刀剑交锋",
+      "keywords": [
+        "刀剑",
+        "压刃",
+        "相持"
+      ],
+      "file": "02_刀剑交锋.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0203",
+      "name": "横扫让路",
+      "category": "刀剑交锋",
+      "keywords": [
+        "刀剑",
+        "横扫",
+        "封路"
+      ],
+      "file": "02_刀剑交锋.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0204",
+      "name": "失剑保物",
+      "category": "刀剑交锋",
+      "keywords": [
+        "失剑",
+        "脱手",
+        "保剑"
+      ],
+      "file": "02_刀剑交锋.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0301",
+      "name": "长兵压距",
+      "category": "长短与重软武器",
+      "keywords": [
+        "长枪",
+        "长兵",
+        "压距"
+      ],
+      "file": "03_长短与重软武器.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0302",
+      "name": "重兵余势",
+      "category": "长短与重软武器",
+      "keywords": [
+        "重锤",
+        "重斧",
+        "余势"
+      ],
+      "file": "03_长短与重软武器.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0303",
+      "name": "盾兵推进",
+      "category": "长短与重软武器",
+      "keywords": [
+        "盾牌",
+        "推进",
+        "盾兵"
+      ],
+      "file": "03_长短与重软武器.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0304",
+      "name": "软索牵连",
+      "category": "长短与重软武器",
+      "keywords": [
+        "软索",
+        "鞭",
+        "链",
+        "牵引"
+      ],
+      "file": "03_长短与重软武器.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0401",
+      "name": "追逐转角",
+      "category": "环境与追逐",
+      "keywords": [
+        "追逐",
+        "转角",
+        "绕行"
+      ],
+      "file": "04_环境与追逐.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0402",
+      "name": "阶梯争位",
+      "category": "环境与追逐",
+      "keywords": [
+        "台阶",
+        "楼梯",
+        "高低差"
+      ],
+      "file": "04_环境与追逐.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0403",
+      "name": "借物隔开",
+      "category": "环境与追逐",
+      "keywords": [
+        "桌椅",
+        "障碍",
+        "借物"
+      ],
+      "file": "04_环境与追逐.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0404",
+      "name": "窄道错身",
+      "category": "环境与追逐",
+      "keywords": [
+        "窄道",
+        "错身",
+        "通道"
+      ],
+      "file": "04_环境与追逐.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0501",
+      "name": "护送穿门",
+      "category": "护送与夺物",
+      "keywords": [
+        "护送穿门",
+        "护送",
+        "保护",
+        "撤离"
+      ],
+      "file": "05_护送与夺物.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0502",
+      "name": "争物换手",
+      "category": "护送与夺物",
+      "keywords": [
+        "夺物",
+        "换手",
+        "抢夺"
+      ],
+      "file": "05_护送与夺物.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0503",
+      "name": "持物撤退",
+      "category": "护送与夺物",
+      "keywords": [
+        "携物",
+        "撤退",
+        "搬运"
+      ],
+      "file": "05_护送与夺物.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0504",
+      "name": "阻截争时",
+      "category": "护送与夺物",
+      "keywords": [
+        "阻截",
+        "拖延",
+        "争取时间"
+      ],
+      "file": "05_护送与夺物.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0601",
+      "name": "两面压力",
+      "category": "多人压力与协作",
+      "keywords": [
+        "两面",
+        "夹击",
+        "多人"
+      ],
+      "file": "06_多人压力与协作.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0602",
+      "name": "群体破口",
+      "category": "多人压力与协作",
+      "keywords": [
+        "群战",
+        "破口",
+        "突围"
+      ],
+      "file": "06_多人压力与协作.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0603",
+      "name": "友方交接",
+      "category": "多人压力与协作",
+      "keywords": [
+        "协作",
+        "掩护",
+        "换位"
+      ],
+      "file": "06_多人压力与协作.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0604",
+      "name": "持续敌压",
+      "category": "多人压力与协作",
+      "keywords": [
+        "敌压",
+        "包围",
+        "持续逼近"
+      ],
+      "file": "06_多人压力与协作.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0701",
+      "name": "空中追接",
+      "category": "空中高速与能力战",
+      "keywords": [
+        "飞行",
+        "空中",
+        "追接"
+      ],
+      "file": "07_空中高速与能力战.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0702",
+      "name": "高速穿行",
+      "category": "空中高速与能力战",
+      "keywords": [
+        "高速",
+        "疾步",
+        "闪避"
+      ],
+      "file": "07_空中高速与能力战.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0703",
+      "name": "远近接战",
+      "category": "空中高速与能力战",
+      "keywords": [
+        "远近",
+        "近身",
+        "法术交锋"
+      ],
+      "file": "07_空中高速与能力战.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0704",
+      "name": "能力对抗",
+      "category": "空中高速与能力战",
+      "keywords": [
+        "对波",
+        "破盾",
+        "能力对抗"
+      ],
+      "file": "07_空中高速与能力战.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0801",
+      "name": "受击退让",
+      "category": "受击反转与收尾",
+      "keywords": [
+        "受击",
+        "后退",
+        "失衡"
+      ],
+      "file": "08_受击反转与收尾.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0802",
+      "name": "倒地续动",
+      "category": "受击反转与收尾",
+      "keywords": [
+        "倒地",
+        "翻身",
+        "起身"
+      ],
+      "file": "08_受击反转与收尾.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0803",
+      "name": "疲惫逆转",
+      "category": "受击反转与收尾",
+      "keywords": [
+        "疲惫",
+        "逆转",
+        "反击"
+      ],
+      "file": "08_受击反转与收尾.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0804",
+      "name": "撤离收尾",
+      "category": "受击反转与收尾",
+      "keywords": [
+        "撤离",
+        "收尾",
+        "余势"
+      ],
+      "file": "08_受击反转与收尾.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0901",
+      "name": "单矢拦截",
+      "category": "远程投射与拦截",
+      "keywords": [
+        "弩箭",
+        "弓箭",
+        "投射",
+        "拦截"
+      ],
+      "file": "09_远程投射与拦截.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0902",
+      "name": "连续投射压力",
+      "category": "远程投射与拦截",
+      "keywords": [
+        "弹道",
+        "连射",
+        "连续射击"
+      ],
+      "file": "09_远程投射与拦截.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0903",
+      "name": "投物去回",
+      "category": "远程投射与拦截",
+      "keywords": [
+        "投掷",
+        "回旋",
+        "回收"
+      ],
+      "file": "09_远程投射与拦截.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "ACT-0904",
+      "name": "掩体接压",
+      "category": "远程投射与拦截",
+      "keywords": [
+        "掩体",
+        "遮挡",
+        "破掩体"
+      ],
+      "file": "09_远程投射与拦截.md",
+      "evidence_ids": [
+        "B1",
+        "B2"
+      ],
+      "validation_status": "adaptation_unverified"
+    }
+  ]
+}

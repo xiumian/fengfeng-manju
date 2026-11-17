@@ -1,5 +1,5 @@
 {
-  "version": "1.0",
+  "version": "3.0",
   "entries": [
     {
       "id": "VFX-0101",
@@ -15,7 +15,11 @@
         "S1",
         "S2"
       ],
-      "file": "01_剑气与御剑.md"
+      "file": "01_剑气与御剑.md",
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0102",
@@ -31,7 +35,11 @@
         "S1",
         "S2"
       ],
-      "file": "01_剑气与御剑.md"
+      "file": "01_剑气与御剑.md",
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0103",
@@ -47,7 +55,11 @@
         "S1",
         "S2"
       ],
-      "file": "01_剑气与御剑.md"
+      "file": "01_剑气与御剑.md",
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0104",
@@ -63,7 +75,11 @@
         "S1",
         "S2"
       ],
-      "file": "01_剑气与御剑.md"
+      "file": "01_剑气与御剑.md",
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0105",
@@ -79,7 +95,11 @@
         "S1",
         "S2"
       ],
-      "file": "01_剑气与御剑.md"
+      "file": "01_剑气与御剑.md",
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0106",
@@ -95,7 +115,11 @@
         "S1",
         "S2"
       ],
-      "file": "01_剑气与御剑.md"
+      "file": "01_剑气与御剑.md",
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0201",
@@ -111,7 +135,12 @@
         "S2",
         "S6"
       ],
-      "file": "02_拳掌与气劲.md"
+      "file": "02_拳掌与气劲.md",
+      "evidence_ids": [
+        "B1",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0202",
@@ -127,7 +156,12 @@
         "S2",
         "S6"
       ],
-      "file": "02_拳掌与气劲.md"
+      "file": "02_拳掌与气劲.md",
+      "evidence_ids": [
+        "B1",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0203",
@@ -143,7 +177,12 @@
         "S2",
         "S6"
       ],
-      "file": "02_拳掌与气劲.md"
+      "file": "02_拳掌与气劲.md",
+      "evidence_ids": [
+        "B1",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0204",
@@ -159,7 +198,12 @@
         "S2",
         "S6"
       ],
-      "file": "02_拳掌与气劲.md"
+      "file": "02_拳掌与气劲.md",
+      "evidence_ids": [
+        "B1",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0205",
@@ -175,7 +219,12 @@
         "S2",
         "S6"
       ],
-      "file": "02_拳掌与气劲.md"
+      "file": "02_拳掌与气劲.md",
+      "evidence_ids": [
+        "B1",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0206",
@@ -191,7 +240,12 @@
         "S2",
         "S6"
       ],
-      "file": "02_拳掌与气劲.md"
+      "file": "02_拳掌与气劲.md",
+      "evidence_ids": [
+        "B1",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0301",
@@ -206,7 +260,12 @@
         "S3",
         "S7"
       ],
-      "file": "03_火焰与熔岩.md"
+      "file": "03_火焰与熔岩.md",
+      "evidence_ids": [
+        "B3",
+        "B4"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0302",
@@ -222,7 +281,12 @@
         "S3",
         "S7"
       ],
-      "file": "03_火焰与熔岩.md"
+      "file": "03_火焰与熔岩.md",
+      "evidence_ids": [
+        "B3",
+        "B4"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0303",
@@ -238,7 +302,12 @@
         "S3",
         "S7"
       ],
-      "file": "03_火焰与熔岩.md"
+      "file": "03_火焰与熔岩.md",
+      "evidence_ids": [
+        "B3",
+        "B4"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0304",
@@ -254,7 +323,12 @@
         "S3",
         "S7"
       ],
-      "file": "03_火焰与熔岩.md"
+      "file": "03_火焰与熔岩.md",
+      "evidence_ids": [
+        "B3",
+        "B4"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0305",
@@ -270,7 +344,12 @@
         "S3",
         "S7"
       ],
-      "file": "03_火焰与熔岩.md"
+      "file": "03_火焰与熔岩.md",
+      "evidence_ids": [
+        "B3",
+        "B4"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0306",
@@ -286,7 +365,29 @@
         "S3",
         "S7"
       ],
-      "file": "03_火焰与熔岩.md"
+      "file": "03_火焰与熔岩.md",
+      "evidence_ids": [
+        "B3",
+        "B4"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-0307",
+      "name": "持续火束",
+      "category": "火焰与熔岩",
+      "keywords": [
+        "火束",
+        "持续喷射",
+        "断供"
+      ],
+      "source_ids": [],
+      "file": "03_火焰与熔岩.md",
+      "evidence_ids": [
+        "B3",
+        "B4"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0401",
@@ -302,7 +403,12 @@
         "S4",
         "S5"
       ],
-      "file": "04_水流与寒冰.md"
+      "file": "04_水流与寒冰.md",
+      "evidence_ids": [
+        "B6",
+        "B8"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0402",
@@ -318,7 +424,12 @@
         "S4",
         "S5"
       ],
-      "file": "04_水流与寒冰.md"
+      "file": "04_水流与寒冰.md",
+      "evidence_ids": [
+        "B6",
+        "B8"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0403",
@@ -334,7 +445,12 @@
         "S4",
         "S5"
       ],
-      "file": "04_水流与寒冰.md"
+      "file": "04_水流与寒冰.md",
+      "evidence_ids": [
+        "B6",
+        "B8"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0404",
@@ -350,7 +466,12 @@
         "S4",
         "S5"
       ],
-      "file": "04_水流与寒冰.md"
+      "file": "04_水流与寒冰.md",
+      "evidence_ids": [
+        "B6",
+        "B8"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0405",
@@ -366,7 +487,12 @@
         "S4",
         "S5"
       ],
-      "file": "04_水流与寒冰.md"
+      "file": "04_水流与寒冰.md",
+      "evidence_ids": [
+        "B6",
+        "B8"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0406",
@@ -382,7 +508,28 @@
         "S4",
         "S5"
       ],
-      "file": "04_水流与寒冰.md"
+      "file": "04_水流与寒冰.md",
+      "evidence_ids": [
+        "B6",
+        "B8"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-0407",
+      "name": "水幕分流",
+      "category": "水流与寒冰",
+      "keywords": [
+        "水幕",
+        "分流",
+        "瀑帘"
+      ],
+      "source_ids": [],
+      "file": "04_水流与寒冰.md",
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0501",
@@ -399,7 +546,12 @@
         "S6",
         "S8"
       ],
-      "file": "05_雷电与风压.md"
+      "file": "05_雷电与风压.md",
+      "evidence_ids": [
+        "B5",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0502",
@@ -416,7 +568,12 @@
         "S6",
         "S8"
       ],
-      "file": "05_雷电与风压.md"
+      "file": "05_雷电与风压.md",
+      "evidence_ids": [
+        "B5",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0503",
@@ -433,7 +590,12 @@
         "S6",
         "S8"
       ],
-      "file": "05_雷电与风压.md"
+      "file": "05_雷电与风压.md",
+      "evidence_ids": [
+        "B5",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0504",
@@ -450,7 +612,12 @@
         "S6",
         "S8"
       ],
-      "file": "05_雷电与风压.md"
+      "file": "05_雷电与风压.md",
+      "evidence_ids": [
+        "B5",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0505",
@@ -467,7 +634,12 @@
         "S6",
         "S8"
       ],
-      "file": "05_雷电与风压.md"
+      "file": "05_雷电与风压.md",
+      "evidence_ids": [
+        "B5",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0506",
@@ -484,7 +656,29 @@
         "S6",
         "S8"
       ],
-      "file": "05_雷电与风压.md"
+      "file": "05_雷电与风压.md",
+      "evidence_ids": [
+        "B5",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-0507",
+      "name": "牵连雷束",
+      "category": "雷电与风压",
+      "keywords": [
+        "雷束",
+        "持续电流",
+        "接点"
+      ],
+      "source_ids": [],
+      "file": "05_雷电与风压.md",
+      "evidence_ids": [
+        "B5",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0601",
@@ -501,7 +695,12 @@
         "S5",
         "S9"
       ],
-      "file": "06_岩土与木系.md"
+      "file": "06_岩土与木系.md",
+      "evidence_ids": [
+        "B7",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0602",
@@ -518,7 +717,12 @@
         "S5",
         "S9"
       ],
-      "file": "06_岩土与木系.md"
+      "file": "06_岩土与木系.md",
+      "evidence_ids": [
+        "B7",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0603",
@@ -535,7 +739,12 @@
         "S5",
         "S9"
       ],
-      "file": "06_岩土与木系.md"
+      "file": "06_岩土与木系.md",
+      "evidence_ids": [
+        "B7",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0604",
@@ -552,7 +761,12 @@
         "S5",
         "S9"
       ],
-      "file": "06_岩土与木系.md"
+      "file": "06_岩土与木系.md",
+      "evidence_ids": [
+        "B7",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0605",
@@ -569,7 +783,12 @@
         "S5",
         "S9"
       ],
-      "file": "06_岩土与木系.md"
+      "file": "06_岩土与木系.md",
+      "evidence_ids": [
+        "B7",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0606",
@@ -586,7 +805,29 @@
         "S5",
         "S9"
       ],
-      "file": "06_岩土与木系.md"
+      "file": "06_岩土与木系.md",
+      "evidence_ids": [
+        "B7",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-0607",
+      "name": "材料崩解",
+      "category": "岩土与木系",
+      "keywords": [
+        "崩解",
+        "破碎",
+        "瓦解",
+        "残片"
+      ],
+      "source_ids": [],
+      "file": "06_岩土与木系.md",
+      "evidence_ids": [
+        "B7"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0701",
@@ -603,7 +844,11 @@
         "S4",
         "S8"
       ],
-      "file": "07_护盾与阵法.md"
+      "file": "07_护盾与阵法.md",
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0702",
@@ -620,7 +865,11 @@
         "S4",
         "S8"
       ],
-      "file": "07_护盾与阵法.md"
+      "file": "07_护盾与阵法.md",
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0703",
@@ -637,7 +886,11 @@
         "S4",
         "S8"
       ],
-      "file": "07_护盾与阵法.md"
+      "file": "07_护盾与阵法.md",
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0704",
@@ -654,7 +907,11 @@
         "S4",
         "S8"
       ],
-      "file": "07_护盾与阵法.md"
+      "file": "07_护盾与阵法.md",
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0705",
@@ -671,7 +928,11 @@
         "S4",
         "S8"
       ],
-      "file": "07_护盾与阵法.md"
+      "file": "07_护盾与阵法.md",
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0706",
@@ -688,7 +949,28 @@
         "S4",
         "S8"
       ],
-      "file": "07_护盾与阵法.md"
+      "file": "07_护盾与阵法.md",
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-0707",
+      "name": "单向弧盾",
+      "category": "护盾与阵法",
+      "keywords": [
+        "弧盾",
+        "掌盾",
+        "斜盾",
+        "偏转"
+      ],
+      "source_ids": [],
+      "file": "07_护盾与阵法.md",
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0801",
@@ -704,7 +986,11 @@
         "S2",
         "自设计"
       ],
-      "file": "08_兽形与空间异象.md"
+      "file": "08_兽形与空间异象.md",
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0802",
@@ -720,7 +1006,11 @@
         "S2",
         "自设计"
       ],
-      "file": "08_兽形与空间异象.md"
+      "file": "08_兽形与空间异象.md",
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0803",
@@ -736,7 +1026,11 @@
         "S2",
         "自设计"
       ],
-      "file": "08_兽形与空间异象.md"
+      "file": "08_兽形与空间异象.md",
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0804",
@@ -752,7 +1046,11 @@
         "S2",
         "自设计"
       ],
-      "file": "08_兽形与空间异象.md"
+      "file": "08_兽形与空间异象.md",
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0805",
@@ -768,7 +1066,11 @@
         "S2",
         "自设计"
       ],
-      "file": "08_兽形与空间异象.md"
+      "file": "08_兽形与空间异象.md",
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
     },
     {
       "id": "VFX-0806",
@@ -784,7 +1086,1313 @@
         "S2",
         "自设计"
       ],
-      "file": "08_兽形与空间异象.md"
+      "file": "08_兽形与空间异象.md",
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-0807",
+      "name": "附体兽纹",
+      "category": "兽形与空间异象",
+      "keywords": [
+        "兽纹",
+        "附体",
+        "兽影",
+        "护臂"
+      ],
+      "source_ids": [],
+      "file": "08_兽形与空间异象.md",
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-0901",
+      "name": "烟幕遮蔽",
+      "category": "遮蔽幻象与时空",
+      "keywords": [
+        "烟幕",
+        "遮蔽",
+        "遮挡"
+      ],
+      "source_ids": [],
+      "file": "09_遮蔽幻象与时空.md",
+      "evidence_ids": [
+        "B4"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-0902",
+      "name": "镜像诱导",
+      "category": "遮蔽幻象与时空",
+      "keywords": [
+        "幻象",
+        "镜像",
+        "假身"
+      ],
+      "source_ids": [],
+      "file": "09_遮蔽幻象与时空.md",
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-0903",
+      "name": "折射隐匿",
+      "category": "遮蔽幻象与时空",
+      "keywords": [
+        "隐身",
+        "折射",
+        "透明人"
+      ],
+      "source_ids": [],
+      "file": "09_遮蔽幻象与时空.md",
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-0904",
+      "name": "双端传送",
+      "category": "遮蔽幻象与时空",
+      "keywords": [
+        "传送",
+        "双门",
+        "空间门"
+      ],
+      "source_ids": [],
+      "file": "09_遮蔽幻象与时空.md",
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-0905",
+      "name": "重力域偏移",
+      "category": "遮蔽幻象与时空",
+      "keywords": [
+        "重力",
+        "失重",
+        "漂浮"
+      ],
+      "source_ids": [],
+      "file": "09_遮蔽幻象与时空.md",
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-0906",
+      "name": "局部时缓",
+      "category": "遮蔽幻象与时空",
+      "keywords": [
+        "时缓",
+        "减速",
+        "时间场"
+      ],
+      "source_ids": [],
+      "file": "09_遮蔽幻象与时空.md",
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1001",
+      "name": "治疗光流",
+      "category": "治疗强化与变身",
+      "keywords": [
+        "治疗光流",
+        "疗愈",
+        "修复"
+      ],
+      "source_ids": [],
+      "file": "10_治疗强化与变身.md",
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1002",
+      "name": "短时强化",
+      "category": "治疗强化与变身",
+      "keywords": [
+        "强化",
+        "增幅",
+        "增益"
+      ],
+      "source_ids": [],
+      "file": "10_治疗强化与变身.md",
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1003",
+      "name": "外甲展开",
+      "category": "治疗强化与变身",
+      "keywords": [
+        "外甲",
+        "展甲",
+        "机械变身"
+      ],
+      "source_ids": [],
+      "file": "10_治疗强化与变身.md",
+      "evidence_ids": [
+        "B6",
+        "B7"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1004",
+      "name": "能量形态转换",
+      "category": "治疗强化与变身",
+      "keywords": [
+        "变身",
+        "能量化",
+        "形态转换"
+      ],
+      "source_ids": [],
+      "file": "10_治疗强化与变身.md",
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1101",
+      "name": "万剑归宗",
+      "category": "万剑与兵器大阵",
+      "keywords": [
+        "万剑归宗",
+        "万剑",
+        "剑海",
+        "归宗"
+      ],
+      "file": "11_万剑与兵器大阵.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6",
+        "P1",
+        "P3"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1102",
+      "name": "剑雨天幕",
+      "category": "万剑与兵器大阵",
+      "keywords": [
+        "剑雨",
+        "天幕",
+        "俯落"
+      ],
+      "file": "11_万剑与兵器大阵.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6",
+        "P1",
+        "P3"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1103",
+      "name": "剑龙奔流",
+      "category": "万剑与兵器大阵",
+      "keywords": [
+        "剑龙",
+        "兵器长龙",
+        "剑群长龙"
+      ],
+      "file": "11_万剑与兵器大阵.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6",
+        "P1",
+        "P3"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1104",
+      "name": "群剑归鞘",
+      "category": "万剑与兵器大阵",
+      "keywords": [
+        "归鞘",
+        "剑群回收",
+        "收剑"
+      ],
+      "file": "11_万剑与兵器大阵.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6",
+        "P1",
+        "P3"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1105",
+      "name": "万刃合一",
+      "category": "万剑与兵器大阵",
+      "keywords": [
+        "万刃合一",
+        "合剑",
+        "巨剑凝聚"
+      ],
+      "file": "11_万剑与兵器大阵.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6",
+        "P1",
+        "P3"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1106",
+      "name": "轮转剑域",
+      "category": "万剑与兵器大阵",
+      "keywords": [
+        "剑域",
+        "轮转",
+        "周天剑阵"
+      ],
+      "file": "11_万剑与兵器大阵.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6",
+        "P1",
+        "P3"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1107",
+      "name": "分波齐射",
+      "category": "万剑与兵器大阵",
+      "keywords": [
+        "分波",
+        "齐射",
+        "剑阵推进"
+      ],
+      "file": "11_万剑与兵器大阵.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6",
+        "P1",
+        "P3"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1108",
+      "name": "碎剑重组",
+      "category": "万剑与兵器大阵",
+      "keywords": [
+        "碎剑",
+        "重组",
+        "兵刃重构"
+      ],
+      "file": "11_万剑与兵器大阵.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6",
+        "P1",
+        "P3"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1201",
+      "name": "法天象地",
+      "category": "法相与天地异象",
+      "keywords": [
+        "法天象地",
+        "法天相地",
+        "巨身",
+        "天地法相"
+      ],
+      "file": "12_法相与天地异象.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1202",
+      "name": "三头六臂法身",
+      "category": "法相与天地异象",
+      "keywords": [
+        "三头六臂",
+        "多臂",
+        "法身"
+      ],
+      "file": "12_法相与天地异象.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1203",
+      "name": "千手法相",
+      "category": "法相与天地异象",
+      "keywords": [
+        "千手",
+        "佛相",
+        "手轮",
+        "巨型手阵"
+      ],
+      "file": "12_法相与天地异象.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1204",
+      "name": "踏天法足",
+      "category": "法相与天地异象",
+      "keywords": [
+        "法足",
+        "巨足",
+        "踏天"
+      ],
+      "file": "12_法相与天地异象.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1205",
+      "name": "擎天托举",
+      "category": "法相与天地异象",
+      "keywords": [
+        "托天",
+        "擎天",
+        "托举",
+        "巨相支撑"
+      ],
+      "file": "12_法相与天地异象.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1206",
+      "name": "巨像崩裂",
+      "category": "法相与天地异象",
+      "keywords": [
+        "法相崩裂",
+        "巨像",
+        "碎相"
+      ],
+      "file": "12_法相与天地异象.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1207",
+      "name": "日月同辉",
+      "category": "法相与天地异象",
+      "keywords": [
+        "日月同辉",
+        "双曜",
+        "天象"
+      ],
+      "file": "12_法相与天地异象.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1208",
+      "name": "天地倒悬",
+      "category": "法相与天地异象",
+      "keywords": [
+        "倒悬",
+        "天地翻转",
+        "镜像天穹"
+      ],
+      "file": "12_法相与天地异象.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1301",
+      "name": "接触爆破",
+      "category": "爆炸与冲击",
+      "keywords": [
+        "接触爆破",
+        "命中爆炸",
+        "爆炸"
+      ],
+      "file": "13_爆炸与冲击.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B3",
+        "B4",
+        "P2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1302",
+      "name": "空爆球壳",
+      "category": "爆炸与冲击",
+      "keywords": [
+        "空爆",
+        "球壳",
+        "能量爆发"
+      ],
+      "file": "13_爆炸与冲击.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B3",
+        "B4",
+        "P2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1303",
+      "name": "地面冲击环",
+      "category": "爆炸与冲击",
+      "keywords": [
+        "冲击环",
+        "冲击波",
+        "尘环"
+      ],
+      "file": "13_爆炸与冲击.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B3",
+        "B4",
+        "P2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1304",
+      "name": "定向贯爆",
+      "category": "爆炸与冲击",
+      "keywords": [
+        "定向爆发",
+        "锥形",
+        "喷流"
+      ],
+      "file": "13_爆炸与冲击.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B3",
+        "B4",
+        "P2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1305",
+      "name": "多段链爆",
+      "category": "爆炸与冲击",
+      "keywords": [
+        "链爆",
+        "连环爆炸",
+        "分段爆发"
+      ],
+      "file": "13_爆炸与冲击.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B3",
+        "B4",
+        "P2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1306",
+      "name": "内聚反爆",
+      "category": "爆炸与冲击",
+      "keywords": [
+        "内聚",
+        "反爆",
+        "收缩塌陷"
+      ],
+      "file": "13_爆炸与冲击.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B3",
+        "B4",
+        "P2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1307",
+      "name": "水下冲击",
+      "category": "爆炸与冲击",
+      "keywords": [
+        "水下爆发",
+        "气泡",
+        "水压"
+      ],
+      "file": "13_爆炸与冲击.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B3",
+        "B4",
+        "P2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1308",
+      "name": "彩焰烟花",
+      "category": "爆炸与冲击",
+      "keywords": [
+        "烟花",
+        "彩焰",
+        "礼焰",
+        "星爆"
+      ],
+      "file": "13_爆炸与冲击.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B3",
+        "B4",
+        "P2"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1401",
+      "name": "能量光炮",
+      "category": "光束与光场",
+      "keywords": [
+        "能量光炮",
+        "光炮",
+        "粒子炮"
+      ],
+      "file": "14_光束与光场.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1402",
+      "name": "扫掠光束",
+      "category": "光束与光场",
+      "keywords": [
+        "扫射光束",
+        "扫掠",
+        "激光扫场"
+      ],
+      "file": "14_光束与光场.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1403",
+      "name": "天光巨柱",
+      "category": "光束与光场",
+      "keywords": [
+        "天光",
+        "柱形光",
+        "贯天光柱"
+      ],
+      "file": "14_光束与光场.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1404",
+      "name": "环形光场",
+      "category": "光束与光场",
+      "keywords": [
+        "光场",
+        "光环",
+        "波环"
+      ],
+      "file": "14_光束与光场.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1405",
+      "name": "棱镜折束",
+      "category": "光束与光场",
+      "keywords": [
+        "棱镜",
+        "折射",
+        "分束"
+      ],
+      "file": "14_光束与光场.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1406",
+      "name": "逆光神环",
+      "category": "光束与光场",
+      "keywords": [
+        "神环",
+        "背光",
+        "光晕",
+        "冠环"
+      ],
+      "file": "14_光束与光场.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1407",
+      "name": "体积圣光",
+      "category": "光束与光场",
+      "keywords": [
+        "体积光",
+        "光瀑",
+        "光尘"
+      ],
+      "file": "14_光束与光场.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1408",
+      "name": "光栅封锁",
+      "category": "光束与光场",
+      "keywords": [
+        "光栅",
+        "光网",
+        "光墙"
+      ],
+      "file": "14_光束与光场.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1501",
+      "name": "连环雷暴",
+      "category": "雷暴与电磁",
+      "keywords": [
+        "连环雷暴",
+        "雷暴",
+        "雷劫",
+        "雷雨"
+      ],
+      "file": "15_雷暴与电磁.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B5",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1502",
+      "name": "电网罩域",
+      "category": "雷暴与电磁",
+      "keywords": [
+        "雷网",
+        "电网",
+        "雷域",
+        "电罩"
+      ],
+      "file": "15_雷暴与电磁.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B5",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1503",
+      "name": "树状雷链",
+      "category": "雷暴与电磁",
+      "keywords": [
+        "树状雷",
+        "连锁雷",
+        "分叉雷"
+      ],
+      "file": "15_雷暴与电磁.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B5",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1504",
+      "name": "贴地雷蛇",
+      "category": "雷暴与电磁",
+      "keywords": [
+        "雷蛇",
+        "地雷",
+        "电流沿地"
+      ],
+      "file": "15_雷暴与电磁.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B5",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1505",
+      "name": "电磁涡环",
+      "category": "雷暴与电磁",
+      "keywords": [
+        "电磁",
+        "涡环",
+        "磁场",
+        "电环"
+      ],
+      "file": "15_雷暴与电磁.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B5",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1506",
+      "name": "雷铠附体",
+      "category": "雷暴与电磁",
+      "keywords": [
+        "雷铠",
+        "雷电附体",
+        "电甲"
+      ],
+      "file": "15_雷暴与电磁.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B5",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1507",
+      "name": "雷龙游走",
+      "category": "雷暴与电磁",
+      "keywords": [
+        "雷龙",
+        "电龙",
+        "雷兽"
+      ],
+      "file": "15_雷暴与电磁.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B5",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1508",
+      "name": "引雷汇掌",
+      "category": "雷暴与电磁",
+      "keywords": [
+        "引雷",
+        "汇掌",
+        "雷聚"
+      ],
+      "file": "15_雷暴与电磁.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B5",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1601",
+      "name": "星尘聚核",
+      "category": "粒子与群体运动",
+      "keywords": [
+        "星尘",
+        "聚核",
+        "聚能",
+        "汇聚"
+      ],
+      "file": "16_粒子与群体运动.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "P1",
+        "P3",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1602",
+      "name": "砂粒旋涡",
+      "category": "粒子与群体运动",
+      "keywords": [
+        "砂暴",
+        "砂旋",
+        "砂粒",
+        "沙尘"
+      ],
+      "file": "16_粒子与群体运动.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "P1",
+        "P3",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1603",
+      "name": "流萤环绕",
+      "category": "粒子与群体运动",
+      "keywords": [
+        "流萤",
+        "萤光",
+        "灵点",
+        "环绕"
+      ],
+      "file": "16_粒子与群体运动.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "P1",
+        "P3",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1604",
+      "name": "带状灵流",
+      "category": "粒子与群体运动",
+      "keywords": [
+        "灵流",
+        "条带",
+        "丝带",
+        "能量绸"
+      ],
+      "file": "16_粒子与群体运动.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "P1",
+        "P3",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1605",
+      "name": "破片喷流",
+      "category": "粒子与群体运动",
+      "keywords": [
+        "碎片",
+        "喷流",
+        "抛散",
+        "火星喷溅"
+      ],
+      "file": "16_粒子与群体运动.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "P1",
+        "P3",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1606",
+      "name": "花瓣风暴",
+      "category": "粒子与群体运动",
+      "keywords": [
+        "花瓣",
+        "花雨",
+        "花瓣旋风"
+      ],
+      "file": "16_粒子与群体运动.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "P1",
+        "P3",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1607",
+      "name": "雾粒凝形",
+      "category": "粒子与群体运动",
+      "keywords": [
+        "雾粒",
+        "凝形",
+        "雾兽",
+        "体积显形"
+      ],
+      "file": "16_粒子与群体运动.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "P1",
+        "P3",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1608",
+      "name": "群体涌动",
+      "category": "粒子与群体运动",
+      "keywords": [
+        "群粒",
+        "追随",
+        "涌动",
+        "虫群"
+      ],
+      "file": "16_粒子与群体运动.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "P1",
+        "P3",
+        "B6"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1701",
+      "name": "冰火交界",
+      "category": "元素复合与场域",
+      "keywords": [
+        "冰火",
+        "霜焰",
+        "元素对抗"
+      ],
+      "file": "17_元素复合与场域.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6",
+        "P1"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1702",
+      "name": "风雷旋柱",
+      "category": "元素复合与场域",
+      "keywords": [
+        "风雷",
+        "旋柱",
+        "雷暴龙卷"
+      ],
+      "file": "17_元素复合与场域.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6",
+        "P1"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1703",
+      "name": "熔岩冰壳",
+      "category": "元素复合与场域",
+      "keywords": [
+        "熔岩",
+        "冰壳",
+        "元素封层"
+      ],
+      "file": "17_元素复合与场域.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6",
+        "P1"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1704",
+      "name": "砂海巨浪",
+      "category": "元素复合与场域",
+      "keywords": [
+        "砂海",
+        "沙浪",
+        "流砂"
+      ],
+      "file": "17_元素复合与场域.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6",
+        "P1"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1705",
+      "name": "云海翻涌",
+      "category": "元素复合与场域",
+      "keywords": [
+        "云海",
+        "云浪",
+        "天云"
+      ],
+      "file": "17_元素复合与场域.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6",
+        "P1"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1706",
+      "name": "黑洞吸积",
+      "category": "元素复合与场域",
+      "keywords": [
+        "黑洞",
+        "吸积",
+        "暗核",
+        "引力旋盘"
+      ],
+      "file": "17_元素复合与场域.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6",
+        "P1"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1707",
+      "name": "极光天幕",
+      "category": "元素复合与场域",
+      "keywords": [
+        "极光",
+        "光幕",
+        "天幕垂帘"
+      ],
+      "file": "17_元素复合与场域.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6",
+        "P1"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1708",
+      "name": "重力碎岛",
+      "category": "元素复合与场域",
+      "keywords": [
+        "碎岛",
+        "浮岩",
+        "浮空地块"
+      ],
+      "file": "17_元素复合与场域.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6",
+        "P1"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1801",
+      "name": "溶解光尘",
+      "category": "消散溶解与余波",
+      "keywords": [
+        "溶解",
+        "光尘",
+        "灰化",
+        "解体"
+      ],
+      "file": "18_消散溶解与余波.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6",
+        "B7",
+        "P1"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1802",
+      "name": "石化碎散",
+      "category": "消散溶解与余波",
+      "keywords": [
+        "石化",
+        "碎散",
+        "石粉"
+      ],
+      "file": "18_消散溶解与余波.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6",
+        "B7",
+        "P1"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1803",
+      "name": "烟化抽离",
+      "category": "消散溶解与余波",
+      "keywords": [
+        "烟化",
+        "抽离",
+        "黑烟离体"
+      ],
+      "file": "18_消散溶解与余波.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6",
+        "B7",
+        "P1"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1804",
+      "name": "倒流回收",
+      "category": "消散溶解与余波",
+      "keywords": [
+        "倒流",
+        "回收",
+        "粒子回卷"
+      ],
+      "file": "18_消散溶解与余波.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6",
+        "B7",
+        "P1"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1805",
+      "name": "火星余烬",
+      "category": "消散溶解与余波",
+      "keywords": [
+        "余烬",
+        "火星",
+        "灰烬",
+        "飘火"
+      ],
+      "file": "18_消散溶解与余波.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6",
+        "B7",
+        "P1"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1806",
+      "name": "水珠回落",
+      "category": "消散溶解与余波",
+      "keywords": [
+        "水珠",
+        "回落",
+        "雨化",
+        "水雾"
+      ],
+      "file": "18_消散溶解与余波.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6",
+        "B7",
+        "P1"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1807",
+      "name": "空间折叠闭合",
+      "category": "消散溶解与余波",
+      "keywords": [
+        "折叠",
+        "空间闭合",
+        "裂隙收口"
+      ],
+      "file": "18_消散溶解与余波.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6",
+        "B7",
+        "P1"
+      ],
+      "validation_status": "adaptation_unverified"
+    },
+    {
+      "id": "VFX-1808",
+      "name": "神像退相",
+      "category": "消散溶解与余波",
+      "keywords": [
+        "退相",
+        "法相退去",
+        "巨相散去"
+      ],
+      "file": "18_消散溶解与余波.md",
+      "source_ids": [],
+      "evidence_ids": [
+        "B6",
+        "B7",
+        "P1"
+      ],
+      "validation_status": "adaptation_unverified"
     }
   ]
 }

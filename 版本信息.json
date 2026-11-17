@@ -1,8 +1,8 @@
 {
   "package_name": "fengfeng manju",
-  "distribution_name": null,
-  "version": "8.2.0",
-  "build_date": "2026-11-16",
+  "distribution_name": "新版",
+  "version": "8.2.1",
+  "build_date": "2026-11-18",
   "trigger": "$fengfeng-manju",
   "trigger_aliases": [
     "九宫",
@@ -16,7 +16,7 @@
   "default_project": null,
   "default_port": "dynamic-localhost",
   "segments": null,
-  "prompt_transform": "任务路由 → 完整事件底稿 → 按需视听设计 → 编译 → 检查/定向返修 → 交付",
+  "prompt_transform": "创作准备（按授权扩写或提取） → 完整事件底稿 → 任务路由 → 按需视听设计 → 编译 → 检查/定向返修 → 交付",
   "workbench_features": [
     "D1-D5项目配置",
     "九个不重复观察状态",
@@ -31,9 +31,15 @@
     "browser runtime"
   ],
   "vfx_library": {
-    "version": "1.0",
-    "categories": 8,
-    "entries": 48,
+    "version": "3.0",
+    "categories": 18,
+    "entries": 128,
     "index": "references/招式特效库/索引.md"
+  },
+  "action_library": {
+    "version": "2.0",
+    "categories": 9,
+    "entries": 36,
+    "index": "references/打斗编排库/索引.md"
   }
 }
