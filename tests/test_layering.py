@@ -161,7 +161,17 @@ class InstructionContracts(unittest.TestCase):
             self.assertIn(heading, template)
         for backstage in ['动态元素复核', '完成检查']:
             self.assertNotIn(backstage, template)
-        self.assertTrue(template.rstrip().endswith('[按上述单镜格式继续，直至覆盖片段总时长。]'))
+        tail = template.split('【段尾交接镜｜仅供抽帧，成片剪除】', 1)
+        self.assertEqual(len(tail), 2)
+        for cue in ('否则整段删除', '默认约0.2秒', '固定地标', '不重新摆位'):
+            self.assertIn(cue, tail[1])
+        from workflow_delivery import timing_node_ranges
+        first = '——0—14.8秒：【主戏】'
+        last = '——14.8—15秒：【段尾交接镜｜仅供抽帧，成片剪除】'
+        shots = [{'heading': first, 'start': 0, 'end': 14.8},
+                 {'heading': last, 'start': 14.8, 'end': 15}]
+        self.assertEqual(len(timing_node_ranges(
+            first+'\n主戏。\n'+last+'\n固定斜俯视。', shots, 15)), 2)
         compile_rules = (ROOT / 'references/modules/compile.md').read_text(encoding='utf-8')
         self.assertIn('video-prompt-template.txt', compile_rules)
         self.assertIn('当前用户明确格式优先', compile_rules)

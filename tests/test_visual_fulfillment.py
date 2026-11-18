@@ -78,6 +78,18 @@ class VisualFulfillment(unittest.TestCase):
         p = w.submit(p, 'validate', review, c['receipt'])
         self.assertEqual(p['workflow']['status'], 'text_checked')
 
+    def test_main_effect_chain_reaches_owner_context_and_protects_aftereffect(self):
+        task = {'mode': 'prompt'}
+        p = w.init(fixture(), task)
+        for module in ('source', 'action', 'vfx', 'camera', 'compile', 'validate'):
+            c = w.context(task, module, p)
+            method = next(x['text'] for x in c['rules'] if x['path'] == METHOD)
+            for cue in ('主特效的可见变化链', '推进或传播', '供能断开', '材料与环境不能同速退场'):
+                self.assertIn(cue, method, module)
+        cases = (ROOT / 'references/visual-fulfillment-examples.md').read_text(encoding='utf-8')
+        for cue in ('裂面再生碎屑', '护盾回弹不等于爆炸', '推进中的液态变身'):
+            self.assertIn(cue, cases)
+
     def test_examples_include_named_only_overload_and_simple_case(self):
         text = (ROOT / 'references/visual-fulfillment-examples.md').read_text(encoding='utf-8')
         for cue in ['法相', '剑海', '对白', '只有层名', '普通小招', '文字判定', '未成片验证']:

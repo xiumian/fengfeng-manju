@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 MODES = {'prompt', 'revise', 'grid', 'edit_grid', 'workbench', 'discuss', 'maintain'}
 FEATURES = set(DESIGN) - {'camera'}
 CONTRACT_VERSION = '8.2'
-RULES_VERSION = '8.2.1'
+RULES_VERSION = '8.2.2'
 
 
 def require(ok, message):
