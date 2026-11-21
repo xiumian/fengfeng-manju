@@ -2,7 +2,7 @@
 name: fengfeng-manju
 description: 将小说、剧本或创意与资产转为完整中文视频提示词，设计动作、表演、特效与镜头；按需九宫验证、单格修图和工作台保存。
 metadata:
-  version: '8.2.2'
+  version: '8.2.3'
 ---
 
 # fengfeng manju｜分层生产
