@@ -8,7 +8,12 @@ class EmotionDesign(unittest.TestCase):
   t={'mode':'prompt'};p=w.init({'sources':[{'id':'S1','text':'甲发现乙回来，继续手上任务。'}],'events':[{'id':'E1','source_ids':['S1'],'start':0,'end':4,'body':'甲发现乙回来，继续手上任务。','requires':['action','performance','sound']}]},t)
   for m in ['performance','action','sound','camera','compile','validate']:
    c=w.context(t,m,p);rules={r['path']:r['text'] for r in c['rules']};path='references/emotion-performance-design.md'
-   self.assertTrue(path in rules,m);self.assertEqual(rules[path],(R/path).read_text(encoding='utf-8'));self.assertEqual(c['receipt']['rules_hash'],w.fingerprint(c['rules']))
+   self.assertIn(path,rules,m)
+   cue={'performance':'情境对照','camera':'眉与眼睑','action':'全身与行动共同表达',
+        'sound':'全身与行动共同表达','compile':'编译保真','validate':'表现力复核'}[m]
+   self.assertIn(cue,rules[path],m)
+   if m=='performance': self.assertEqual(rules[path],(R/path).read_text(encoding='utf-8'))
+   self.assertEqual(c['receipt']['rules_hash'],w.fingerprint(c['rules']))
  def test_actual_emotion_handoff(self):
   t={'mode':'prompt'};p=w.init({'sources':[{'id':'S1','text':'甲看见乙回来，没有说话，继续折衣。'}],'events':[{'id':'E1','source_ids':['S1'],'start':0,'end':4,'body':'甲看见乙回来，没有说话，继续折衣。','requires':['performance','sound']}]},t)
   c=w.context(t,'source',p)

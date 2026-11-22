@@ -17,7 +17,7 @@ class ShotRhythm(unittest.TestCase):
                     '整场节奏','单镜节奏','不是越短越好','动作尚未结束','观看收益','后台']:
             self.assertIn(cue,text)
 
-    def test_four_owners_receive_the_current_full_method(self):
+    def test_four_owners_receive_the_relevant_method_sections(self):
         task={'mode':'prompt'}
         p=w.init({'sources':[{'id':'S1','text':'来袭被挡，掌心初裂，甲继续推进。'}],
             'events':[{'id':'E1','source_ids':['S1'],'body':'来袭被挡，掌心初裂，甲继续推进。',
@@ -27,7 +27,9 @@ class ShotRhythm(unittest.TestCase):
                 ctx=w.context(task,module,p)
                 rule={r['path']:r['text'] for r in ctx['rules']}
                 self.assertIn(PATH,rule)
-                self.assertEqual(rule[PATH],(ROOT/PATH).read_text(encoding='utf-8'))
+                self.assertIn('职责、交接与交付',rule[PATH])
+                if module in ('camera','validate'):
+                    self.assertEqual(rule[PATH],(ROOT/PATH).read_text(encoding='utf-8'))
                 self.assertEqual(ctx['receipt']['rules_hash'],w.fingerprint(ctx['rules']))
 
     def test_half_second_cut_is_accepted_by_existing_timing_contract(self):

@@ -33,7 +33,9 @@ class StoryCutQuality(unittest.TestCase):
                 with self.subTest(path=path, module=module):
                     ctx = w.context(task, module, project)
                     rules = {r['path']: r['text'] for r in ctx['rules']}
-                    self.assertEqual(rules.get(path), (ROOT / path).read_text(encoding='utf-8'))
+                    self.assertIn(path, rules)
+                    if name in ('narrative-event-design.md', 'prompt-backstage-checks.md'):
+                        self.assertEqual(rules[path], (ROOT / path).read_text(encoding='utf-8'))
                     for cue in cues:
                         self.assertIn(cue, rules[path])
         front_rules = {r['path']: r['text'] for r in w.context(task, 'compile', project)['rules']}

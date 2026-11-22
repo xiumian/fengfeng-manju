@@ -30,7 +30,9 @@ class VisualFulfillment(unittest.TestCase):
             c = w.context({'mode': 'prompt'}, module, p)
             rules = {x['path']: x['text'] for x in c['rules']}
             self.assertTrue(METHOD in rules, module)
-            self.assertEqual(rules[METHOD], (ROOT / METHOD).read_text(encoding='utf-8'))
+            self.assertIn('主特效的可见变化链',rules[METHOD])
+            if module == 'vfx':
+                self.assertEqual(rules[METHOD], (ROOT / METHOD).read_text(encoding='utf-8'))
             self.assertEqual(c['receipt']['rules_hash'], w.fingerprint(c['rules']))
             self.assertTrue({'R:fan', 'R:wave'} <= {x['id'] for x in c['coverage']})
 

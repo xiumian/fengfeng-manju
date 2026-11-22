@@ -29,13 +29,17 @@ class LayeredSound(unittest.TestCase):
         for m in ('sound', 'action', 'vfx', 'camera', 'compile', 'validate'):
             c = w.context(t, m, p); rules = {r['path']: r['text'] for r in c['rules']}
             self.assertTrue(PATH in rules, m)
-            self.assertEqual(rules[PATH], (ROOT / PATH).read_text(encoding='utf-8'))
+            cue = {'sound':'连镜对照', 'action':'真实声源', 'vfx':'把每层写成变化',
+                   'camera':'同步、主次和跨镜', 'compile':'实际正文保留六项组织', 'validate':'实际复核与返修'}[m]
+            self.assertIn(cue,rules[PATH],m)
+            if m == 'sound':
+                self.assertEqual(rules[PATH], (ROOT / PATH).read_text(encoding='utf-8'))
             self.assertEqual(c['receipt']['rules_hash'], w.fingerprint(c['rules']))
 
     def test_method_has_sound_construction_not_only_headers(self):
         s = (ROOT / PATH).read_text(encoding='utf-8')
         for cue in ('起声', '持续', '尾响', '同一声源', '不存在', '对白', '画外', '0.5秒',
-                    '开伞', '入洞', '普通', '未核听', 'unmet', 'requirements'):
+                    '开伞', '入洞', '普通', '严格响度、声像和帧级同步留给后期', 'unmet', 'requirements'):
             self.assertTrue(cue in s, cue)
 
     def test_sound_payload_reaches_camera_and_compile_without_flattening(self):

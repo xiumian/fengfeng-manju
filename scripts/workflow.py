@@ -10,14 +10,14 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from workflow_coverage import inventory, features as inventory_features, completion, verify_evidence, verify_reviews, source_units
-from workflow_delivery import check_delivery, timing_node_ranges
+from workflow_delivery import check_delivery, check_direct, timing_node_ranges
 from workflow_rules import DESIGN, RULES, select_rules
 
 ROOT = Path(__file__).resolve().parents[1]
 MODES = {'prompt', 'revise', 'grid', 'edit_grid', 'workbench', 'discuss', 'maintain'}
 FEATURES = set(DESIGN) - {'camera'}
 CONTRACT_VERSION = '8.2'
-RULES_VERSION = '8.2.3'
+RULES_VERSION = '9.0.0'
 
 
 def require(ok, message):
@@ -34,6 +34,8 @@ def plan(task, project=None):
     mode = task.get('mode')
     require(mode in MODES, 'unknown mode')
     check_delivery(task.get('delivery', {}))
+    require(task.get('delivery', {}).get('outputs') != 'dual' or mode == 'prompt',
+            'dual delivery requires a full segment prompt')
     features = task.get('features', [])
     require(isinstance(features, list) and all(f in FEATURES for f in features), 'unknown features')
     declared = set(features)
@@ -84,9 +86,18 @@ def stage_rules(project, task, module, coverage):
     # Grid/workbench routes remap coverage owners without reopening specialist design.
     specialties = (list(dict.fromkeys(s for item in relevant for s in item.get('specialties', [])))
                    if module in DESIGN else [])
+    # These extra handoff pages serve the other phases of the same scoped camera
+    # requirement; they neither add a workflow phase nor load the camera guide.
+    director_handoff = task.get('mode') in {'prompt', 'revise'} and any(
+        item['owner'] == 'camera' and 'director-handoff' in item.get('specialties', [])
+        for item in coverage)
+    capabilities = set(task.get('features', [])) | inventory_features(coverage)
+    if module in DESIGN:
+        capabilities.add(module)
     return select_rules(module, events,
                         [*project.get('constraints', []), *(item['description'] for item in relevant)],
-                        specialties=specialties)
+                        specialties=specialties, capabilities=capabilities,
+                        director_handoff=director_handoff)
 
 
 def validate_project(project):
@@ -141,6 +152,74 @@ def state(project):
     return w
 
 
+def _rules_review(project, w):
+    # Discovery may change the available methods without invalidating earlier
+    # handoffs. Compare each receipt with the rules for its own plan revision.
+    revision = w['revision']
+    historical_plan = w['plan']
+    plans = {revision: historical_plan}
+    for record in reversed(w['history']):
+        revision -= 1
+        historical_plan = record.get('old_plan', historical_plan)
+        plans[revision] = historical_plan
+
+    changed = []
+    results = w['results']
+    for index, result in enumerate(results):
+        saved = result.get('context_receipt') or {}
+        prior = plans.get(saved.get('revision'))
+        module = result['module']
+        if prior is not None and saved.get('rules_hash'):
+            rules, _ = stage_rules(project, prior['task'], module, prior['coverage'])
+            if saved['rules_hash'] == fingerprint(rules):
+                continue
+        changed.append(index)
+
+    modules = [step['module'] for step in w['plan']['steps']]
+    start = changed[0] if changed else w['cursor']
+    if changed:
+        status = 'checked_under_older_rules'
+    elif w['status'] == 'rule_refresh_required':
+        status = 'rule_refresh_required'
+    elif results and start == len(modules):
+        status = 'current_rules'
+    else:
+        status = 'in_progress'
+    return {'state': status, 'recorded_status': w['status'],
+            'changed_modules': [results[i]['module'] for i in changed],
+            'rerun_modules': [result['module'] for result in results[start:]],
+            'keep_modules': [result['module'] for result in results[:start]],
+            'remaining_modules': modules[start:],
+            'resume_from': modules[start] if start < len(modules) else None}
+
+
+def rules_review(project):
+    return _rules_review(project, state(project))
+
+
+def require_current_rules(project, w):
+    review = _rules_review(project, w)
+    require(not review['changed_modules'],
+            'saved handoffs were checked under older rules; run refresh-rules before continuing')
+
+
+def refresh_rules(project):
+    p = copy.deepcopy(project)
+    w = state(p)
+    review = _rules_review(p, w)
+    if not review['changed_modules']:
+        return p
+    start = len(review['keep_modules'])
+    w['history'].append({'type': 'rule_refresh', 'rules_state': 'checked_under_older_rules',
+                         'previous_status': w['status'], 'target': review['resume_from'],
+                         'changed_modules': review['changed_modules'], 'invalidated': w['results'][start:]})
+    w['results'] = w['results'][:start]
+    w['cursor'] = start
+    w['revision'] += 1
+    w['status'] = 'rule_refresh_required'
+    return p
+
+
 def receipt(project, module):
     w = state(project)
     rules, _ = stage_rules(project, w['plan']['task'], module, w['plan']['coverage'])
@@ -168,6 +247,7 @@ def context(task, module, project=None):
         result.update(events=events, adjacent_states=[{k: all_events[j].get(k) for k in ('id', 'start_state', 'end_state')} for j in sorted(neighbors)], constraints=project.get('constraints', []), globals=project.get('globals', {}), upstream=[r for r in w['results'] if r['module'] != module])
         result['coverage'] = w['plan']['coverage']
         result['receipt'] = receipt(project,module)
+        result['rules_review'] = _rules_review(project, w)
         if module in ('source', 'validate'):
             units = source_units(project, task)
             source_ids = {u['source_id'] for u in units}
@@ -184,6 +264,7 @@ def context(task, module, project=None):
 def submit(project, module, payload, context_receipt=None):
     p = copy.deepcopy(project)
     w = state(p)
+    require_current_rules(p, w)
     steps = [s['module'] for s in w['plan']['steps']]
     require(w['cursor'] < len(steps) and steps[w['cursor']] == module, 'out-of-order or unplanned submission')
     require(context_receipt == receipt(p,module), 'current context receipt required; load module context after any upstream change')
@@ -205,7 +286,7 @@ def submit(project, module, payload, context_receipt=None):
         require(set(payload) == {'design'} and isinstance(payload['design'], dict) and set(payload['design']) == ids and all(isinstance(v, str) and v.strip() for v in payload['design'].values()), 'design must cover assigned events only and cannot write upstream fields')
     elif module == 'compile':
         require({'text', 'event_ids', 'dialogue_ids', 'coverage'} <= set(payload)
-                <= {'text', 'event_ids', 'dialogue_ids', 'coverage', 'utterances', 'timing_nodes'}, 'compile fields not allowed')
+                <= {'text', 'event_ids', 'dialogue_ids', 'coverage', 'utterances', 'timing_nodes', 'model_ready_prompt'}, 'compile fields not allowed')
         require(set(payload['event_ids']) == ids, 'missing event coverage')
         text = payload['text']
         require(isinstance(text, str) and text.strip(), 'empty master')
@@ -239,8 +320,21 @@ def submit(project, module, payload, context_receipt=None):
         else:
             require(not utterances, 'unexpected utterance entries')
         verify_evidence(w['plan']['coverage'], payload['coverage'], text, utterances)
+        delivery = task.get('delivery', {})
+        dual = delivery.get('outputs') == 'dual'
+        require(('model_ready_prompt' in payload) == dual, 'dual delivery requires model_ready_prompt; master-only must omit it')
+        if dual:
+            direct = payload['model_ready_prompt']
+            check_direct(direct, text, dialogues, delivery.get('copy_format','full'))
+            if delivery.get('timing') == 'explicit':
+                timing_node_ranges(direct, payload.get('timing_nodes'), delivery.get('duration'), explicit=True)
+            p['model_ready_prompt'] = direct
+        else:
+            p.pop('model_ready_prompt', None)  # A changed master invalidates the old derivative.
+        explicit = task['mode'] == 'prompt' and delivery.get('timing') == 'explicit'
+        require(not explicit or 'timing_nodes' in payload, 'explicit timing requires timing_nodes')
         if 'timing_nodes' in payload:
-            timing_node_ranges(text, payload['timing_nodes'], task.get('delivery', {}).get('duration'))
+            timing_node_ranges(text, payload['timing_nodes'], delivery.get('duration'), explicit=explicit)
         executed = {r['module'] for r in w['results']}
         require(all(i['owner']=='compile' or i['owner'] in executed for i in w['plan']['coverage']), 'required module coverage not executed')
         p.setdefault('video_master_history', []).append(p.get('video_master_prompt', ''))
@@ -326,6 +420,7 @@ def repair(project, target, reason):
 def discover(project, request):
     """Add processing needs anchored in existing sources, without editing story facts."""
     p=copy.deepcopy(project);w=state(p)
+    require_current_rules(p, w)
     require(w['plan']['task']['mode'] in ('prompt','revise','grid','edit_grid'), 'discovery applies to production tasks only')
     require(isinstance(request,dict) and set(request)=={'reason','requirements'}, 'discovery needs reason and requirements')
     require(isinstance(request['reason'],str) and request['reason'].strip(), 'discovery reason missing')
@@ -360,9 +455,35 @@ def load(path):
     return json.loads(Path(path).read_text(encoding='utf-8-sig'))
 
 
+def episode(projects):
+    """Assemble checked segment runs; never shorten or silently merge conflicting assets."""
+    parts, prompts, common = [], {}, ''
+    marker = '━━━━━━━━━━ 片段设定 ━━━━━━━━━━'
+    for project in projects:
+        w = state(project)
+        require(w['status'] == 'text_checked' and w['plan']['task'].get('delivery', {}).get('outputs') == 'dual',
+                'episode requires checked dual segment runs')
+        require_current_rules(project, w)
+        compiled = next(r['payload'] for r in w['results'] if r['module'] == 'compile')
+        master, direct = compiled['text'], compiled['model_ready_prompt']
+        require(master.count(marker) == 1, 'expected exactly one template segment section per run')
+        prefix, body = master.split(marker)
+        sid = re.search(r'^【片段编号】[：:]\s*([^\s]+)[ \t]*$', body, re.M)
+        require(sid and sid[1] not in prompts, 'missing or duplicate segment ID')
+        if not parts:
+            common = prefix.strip()
+            require('【场景全局设定】' in common, 'first segment must include the episode asset page')
+        elif prefix.strip():
+            require(prefix.strip() == common, 'episode asset pages disagree; reconcile before assembly')
+        parts.append(marker + body)
+        prompts[sid[1]] = direct
+    require(parts, 'episode needs at least one segment')
+    return {'production_master': '\n\n'.join([common, *parts]), 'model_ready_prompts': prompts}
+
 def to_workbench(project):
     validate_project(project)
     w = state(project)
+    require_current_rules(project, w)
     require(w['status'] == 'awaiting_actual_image_and_user_acceptance', 'complete grid planning and text checks first')
     require(not w['plan']['task'].get('scope'), 'export a complete segment, not a partial scope')
     panels = project.get('panels', [])
@@ -384,7 +505,7 @@ def main():
     if hasattr(sys.stdout, 'reconfigure'):
         sys.stdout.reconfigure(encoding='utf-8')
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument('command', choices=['plan','context','init','submit','repair','discover','check','workbench-json'])
+    ap.add_argument('command', choices=['plan','context','init','submit','repair','discover','check','refresh-rules','workbench-json','episode'])
     ap.add_argument('input')
     ap.add_argument('extra', nargs='*')
     ap.add_argument('--project')
@@ -393,7 +514,10 @@ def main():
     args = ap.parse_args()
     try:
         data = load(args.input)
-        if args.command == 'plan': result = plan(data,load(args.project) if args.project else None)
+        if args.command == 'episode':
+            require(isinstance(data,list) and all(isinstance(path,str) for path in data), 'expected ordered segment run paths')
+            result = episode(load(Path(args.input).parent / path) for path in data)
+        elif args.command == 'plan': result = plan(data,load(args.project) if args.project else None)
         elif args.command == 'context': result = context(data, args.extra[0], load(args.project) if args.project else None)
         elif args.command == 'init': result = init(data, load(args.extra[0]))
         elif args.command == 'submit':
@@ -401,11 +525,15 @@ def main():
             result = submit(data, args.extra[0], load(args.extra[1]),packet.get('receipt'))
         elif args.command == 'repair': result = repair(data, args.extra[0], args.extra[1])
         elif args.command == 'discover': result = discover(data,load(args.extra[0]))
+        elif args.command == 'refresh-rules':
+            require(args.out and not Path(args.out).exists(), 'refresh-rules needs a new --out file')
+            result = refresh_rules(data)
         elif args.command == 'workbench-json': result = to_workbench(data)
         else:
             validate_project(data)
-            if 'workflow' in data: state(data)
             result = {'structure': 'passed', 'semantic_and_media': 'not automatically verified'}
+            if 'workflow' in data:
+                result['rules_review'] = rules_review(data)
         text = json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False)
         if args.out:
             out = Path(args.out)

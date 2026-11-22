@@ -17,7 +17,7 @@ class SceneRhythm(unittest.TestCase):
                     '并行','容量冲突','不以不等长作为合格条件','后台']:
             self.assertIn(cue,text)
 
-    def test_five_stages_receive_current_full_method(self):
+    def test_five_stages_receive_relevant_method_sections(self):
         task={'mode':'prompt'}
         p=w.init({'sources':[{'id':'S1','text':'甲护送乙离开，受阻后借空当脱身。'}],
             'events':[{'id':'E1','source_ids':['S1'],'body':'甲护送乙离开，受阻后借空当脱身。',
@@ -27,7 +27,9 @@ class SceneRhythm(unittest.TestCase):
                 ctx=w.context(task,module,p)
                 rules={r['path']:r['text'] for r in ctx['rules']}
                 self.assertIn(PATH,rules)
-                self.assertEqual(rules[PATH],(ROOT/PATH).read_text(encoding='utf-8'))
+                self.assertIn('按观看容量分配时间预算',rules[PATH])
+                if module == 'source':
+                    self.assertEqual(rules[PATH],(ROOT/PATH).read_text(encoding='utf-8'))
                 self.assertEqual(ctx['receipt']['rules_hash'],w.fingerprint(ctx['rules']))
 
     def test_entry_preparation_and_owners_reference_unique_method(self):

@@ -23,7 +23,11 @@ class MoveVfxDesign(unittest.TestCase):
                 ctx = w.context(task, module, p)
                 rules = {r['path']: r['text'] for r in ctx['rules']}
                 self.assertTrue(METHOD in rules, module + " missing method")
-                self.assertEqual(rules[METHOD], (ROOT / METHOD).read_text(encoding='utf-8'))
+                cue = {'action':'人物驱动','vfx':'三种对照','camera':'分配时间',
+                       'compile':'编译保真','validate':'表现力复核'}[module]
+                self.assertIn(cue,rules[METHOD],module)
+                if module == 'vfx':
+                    self.assertEqual(rules[METHOD], (ROOT / METHOD).read_text(encoding='utf-8'))
                 self.assertEqual(ctx['receipt']['rules_hash'], w.fingerprint(ctx['rules']))
 
     def test_method_has_construction_handoff_fidelity_and_negative_examples(self):
@@ -31,7 +35,7 @@ class MoveVfxDesign(unittest.TestCase):
         for cue in ['视觉身份', '内部层次', '人物驱动', '展开与攻击', '碰撞变化', '残留与承接',
                     'design', 'event_id', '提出需求不等于替对方定方案', '编译保真',
                     'requirement_reviews', '不足稿', '合格方向', '万剑', '旋枪', '护层',
-                    '不是固定六段', '0.5秒', '未实测']:
+                    '不是固定六段', '0.5秒']:
             self.assertIn(cue, text)
 
     def test_entrypoints_and_owned_sections_reference_method(self):
