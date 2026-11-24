@@ -10,14 +10,15 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from workflow_coverage import inventory, features as inventory_features, completion, verify_evidence, verify_reviews, source_units
-from workflow_delivery import check_delivery, check_direct, timing_node_ranges
+from workflow_delivery import AUDIO_FIELDS, check_delivery, check_direct, shot_audio_details, timing_node_ranges
+from workflow_gate import DeliveryBlocked, light_deliver, prompt_camera_plan, prompt_passages, storyboard_plan
 from workflow_rules import DESIGN, RULES, select_rules
 
 ROOT = Path(__file__).resolve().parents[1]
 MODES = {'prompt', 'revise', 'grid', 'edit_grid', 'workbench', 'discuss', 'maintain'}
 FEATURES = set(DESIGN) - {'camera'}
 CONTRACT_VERSION = '8.2'
-RULES_VERSION = '9.0.0'
+RULES_VERSION = '9.1.0'
 
 
 def require(ok, message):
@@ -29,10 +30,16 @@ def fingerprint(value):
     return hashlib.sha256(json.dumps(value, ensure_ascii=False, sort_keys=True, allow_nan=False).encode()).hexdigest()
 
 
+def departmental(task):
+    return task.get('handoff') == 'departments'
+
+
 def plan(task, project=None):
     require(isinstance(task, dict), 'task must be an object')
     mode = task.get('mode')
     require(mode in MODES, 'unknown mode')
+    require('handoff' not in task or (departmental(task) and mode == 'prompt'),
+            'department handoffs are for complete segment prompts')
     check_delivery(task.get('delivery', {}))
     require(task.get('delivery', {}).get('outputs') != 'dual' or mode == 'prompt',
             'dual delivery requires a full segment prompt')
@@ -59,6 +66,9 @@ def plan(task, project=None):
         if mode == 'edit_grid':
             require(isinstance(task.get('target_panel_id'), str) and task['target_panel_id'], 'edit_grid needs target_panel_id')
             require(task.get('image_version') and isinstance(task.get('coordinates'), list) and len(task['coordinates']) == 4, 'edit_grid needs image version and coordinates')
+    elif departmental(task):
+        modules = ['source', 'assets'] + [m for m in ('action', 'performance', 'vfx') if m in features]
+        modules += ['camera', 'sound', 'compile', 'validate']
     else:
         modules = ['source'] + [m for m in DESIGN if m in features and m != 'camera'] + ['camera', 'compile', 'validate']
     return {'task': copy.deepcopy(task), 'coverage': completion(items,task), 'steps': [{'module': m, 'rules': RULES[m], 'reason': 'mode=' + mode + ('; declared feature' if m in declared else '; auto requirement: '+','.join(i['id'] for i in items if m in inventory_features([i])) if m in features else '; required stage')} for m in modules]}
@@ -149,6 +159,10 @@ def state(project):
     require(w.get('contract_version') == CONTRACT_VERSION, 'legacy workflow: save old file and reinitialize with ' + CONTRACT_VERSION)
     require(w['source_hash'] == fingerprint({k: project.get(k) for k in ('sources', 'events', 'constraints', 'globals', 'requirements', 'assets')}), 'upstream changed; archive and reinitialize affected task')
     require(w['plan'] == plan(w['plan']['task'],project),'coverage/plan changed outside discovery; reinitialize')
+    if departmental(w['plan']['task']):
+        modules = [step['module'] for step in w['plan']['steps']]
+        require(w['cursor'] == len(w['results']) and [r['module'] for r in w['results']] == modules[:w['cursor']],
+                'department results are missing or not in the approved order')
     return w
 
 
@@ -226,8 +240,68 @@ def receipt(project, module):
     return {'module': module, 'cursor': w['cursor'], 'revision': w['revision'], 'source_hash': w['source_hash'], 'coverage_hash': fingerprint(w['plan']['coverage']), 'upstream_hash': fingerprint(w['results']), 'rules_hash': fingerprint(rules)}
 
 
+def camera_source(project, w):
+    task = w['plan']['task']
+    delivery = task.get('delivery', {})
+    events = selected(project, task)
+    stages = [s['module'] for s in w['plan']['steps']]
+    prefix = w['results'][:stages.index('camera')]
+    return {
+        'scope': task.get('reason') or '只编译本段确认的事件、原台词与首尾状态。',
+        'requirements': {'continuity': events[-1].get('end_state', events[-1]['body'])},
+        'dialogues': [d['text'] for e in events for d in e.get('dialogues', [])],
+        'outputs': ['master', 'direct'] if delivery.get('outputs') == 'dual' else ['master'],
+        'copy_format': delivery.get('copy_format', 'full'),
+        'timing': delivery.get('timing', 'relative'), 'duration': delivery.get('duration'),
+        'input_hash': fingerprint([w['source_hash'], prefix]),
+    }
+
+
+def completed_payload(w, module):
+    return next(r['payload'] for r in w['results'] if r['module'] == module)
+
+
+def camera_card(project, w, compiled=None):
+    packet = {'source': camera_source(project, w), **completed_payload(w, 'camera')['camera_plan']}
+    if compiled is not None:
+        packet['drafts'] = {'master': compiled['text']}
+        if 'model_ready_prompt' in compiled:
+            packet['drafts']['direct'] = compiled['model_ready_prompt']
+    return packet
+
+
+def check_sound_handoff(w, audio):
+    headings = {shot['heading'] for shot in completed_payload(w, 'camera')['camera_plan']['design']}
+    if (not isinstance(audio, dict) or set(audio) != headings
+            or not all(isinstance(block, dict) and set(block) == set(AUDIO_FIELDS)
+                       and all(isinstance(v, str) and v.strip() and '\n' not in v and '\r' not in v
+                               for v in block.values()) for block in audio.values())):
+        raise DeliveryBlocked('sound', 'submit six actual sound fields for every approved camera shot')
+
+
+def check_department_copy(project, w, compiled):
+    card = camera_card(project, w, compiled)
+    prompt_passages(card, card['source'], prompt_camera_plan(card))
+    expected = completed_payload(w, 'sound')['shot_audio']
+    for name, draft in card['drafts'].items():
+        if name == 'direct' and card['source']['copy_format'] == 'compact':
+            continue
+        for heading, fields in shot_audio_details(draft).items():
+            if fields != {k: v.strip() for k, v in expected[heading].items()}:
+                raise DeliveryBlocked('compile', f'{name}: the approved sound design changed at {heading}')
+
+
 def context(task, module, project=None):
-    route = state(project)['plan'] if project is not None else plan(task)
+    w = state(project) if project is not None else None
+    route = w['plan'] if w is not None else plan(task)
+    if departmental(route['task']):
+        if w is None:
+            raise DeliveryBlocked('source', 'initialize the current segment before opening a department')
+        require(w['plan']['task'] == task, 'task differs from active workflow')
+        require_current_rules(project, w)
+        next_module = route['steps'][w['cursor']]['module'] if w['cursor'] < len(route['steps']) else None
+        if module != next_module:
+            raise DeliveryBlocked(next_module or 'validate', 'finish the current handoff or repair the completed run first')
     require(module in [s['module'] for s in route['steps']], 'module not in selected route')
     rules, candidates = (stage_rules(project, task, module, route['coverage'])
                          if project is not None else select_rules(module))
@@ -235,7 +309,6 @@ def context(task, module, project=None):
     if module in ('action', 'vfx'):
         result[module + '_candidates'] = candidates
     if project is not None:
-        w = state(project)
         require(w['plan']['task'] == task, 'task differs from active workflow')
         events = stage_events(project, task, module, route['coverage'])
         chosen = {e['id'] for e in events}
@@ -248,6 +321,8 @@ def context(task, module, project=None):
         result['coverage'] = w['plan']['coverage']
         result['receipt'] = receipt(project,module)
         result['rules_review'] = _rules_review(project, w)
+        if departmental(task) and module in ('camera', 'compile', 'validate'):
+            result['camera_source'] = camera_source(project, w)
         if module in ('source', 'validate'):
             units = source_units(project, task)
             source_ids = {u['source_id'] for u in units}
@@ -272,8 +347,19 @@ def submit(project, module, payload, context_receipt=None):
     task = w['plan']['task']
     events = stage_events(p, task, module, w['plan']['coverage'])
     ids = {e['id'] for e in events}
+    staged = departmental(task)
+
+    def check_event_design():
+        design = payload.get('design')
+        require(isinstance(design, dict) and set(design) == ids
+                and all(isinstance(v, str) and v.strip() for v in design.values()),
+                'design must cover assigned events only and cannot write upstream fields')
+
     if module == 'source':
-        require(set(payload) == {'checked_event_ids','source_coverage'} and set(payload['checked_event_ids']) == ids, 'source must explicitly check scope')
+        fields = {'checked_event_ids','source_coverage'} | ({'design'} if staged else set())
+        require(set(payload) == fields and set(payload['checked_event_ids']) == ids, 'source must explicitly check scope')
+        if staged:
+            check_event_design()
         units=source_units(p,task);mapping=payload['source_coverage']
         require(isinstance(mapping,dict) and set(mapping)=={u['id'] for u in units},'source paragraph coverage missing')
         require(all(isinstance(v,dict) and set(v)=={'event_ids','reason'} and isinstance(v['event_ids'],list) and v['event_ids'] and set(v['event_ids'])<=ids and isinstance(v['reason'],str) and v['reason'].strip() for v in mapping.values()), 'source coverage must map each paragraph to events with a reason')
@@ -283,7 +369,16 @@ def submit(project, module, payload, context_receipt=None):
         if task['mode'] in ('grid', 'edit_grid'):
             require(isinstance(p.get('video_master_prompt'), str) and p['video_master_prompt'].strip(), 'sampling needs saved master')
     elif module in DESIGN:
-        require(set(payload) == {'design'} and isinstance(payload['design'], dict) and set(payload['design']) == ids and all(isinstance(v, str) and v.strip() for v in payload['design'].values()), 'design must cover assigned events only and cannot write upstream fields')
+        extra = ({'camera_plan'} if module == 'camera' else {'shot_audio'} if module == 'sound' else set()) if staged else set()
+        require(set(payload) == {'design'} | extra, 'department payload does not match its assigned deliverable')
+        check_event_design()
+        if staged and module == 'camera':
+            camera = payload['camera_plan']
+            require(isinstance(camera, dict) and set(camera) == {'view_plan', 'plan_receipt', 'design'},
+                    'camera department needs its own approved viewing and shot plan')
+            prompt_camera_plan({'source': camera_source(p, w), **camera})
+        if staged and module == 'sound':
+            check_sound_handoff(w, payload['shot_audio'])
     elif module == 'compile':
         require({'text', 'event_ids', 'dialogue_ids', 'coverage'} <= set(payload)
                 <= {'text', 'event_ids', 'dialogue_ids', 'coverage', 'utterances', 'timing_nodes', 'model_ready_prompt'}, 'compile fields not allowed')
@@ -308,7 +403,13 @@ def submit(project, module, payload, context_receipt=None):
             lines=re.findall(r'^([^\n：:（）]{1,40})(?:（[^）\n]*）)?[：:]\s*[“\"]([^”\"\n]*)[”\"]',text,re.M)
             if lines:
                 known_speakers={d['speaker'] for d in dialogues}
-                normalize_speaker=lambda name:name.strip() if name.strip() in known_speakers else name.strip().removesuffix('台词').removesuffix('说')
+                span = re.compile(r'^[0-9]+(?:\.[0-9]+)?\s*(?:秒|s)?\s*[-—–~～至]\s*'
+                                  r'[0-9]+(?:\.[0-9]+)?\s*(?:秒|s)[ \t]+')
+
+                def normalize_speaker(name):
+                    name = span.sub('', name.strip())
+                    return name if name in known_speakers else name.removesuffix('台词').removesuffix('说')
+
                 require([(normalize_speaker(speaker),line) for speaker,line in lines]==[(d['speaker'],d['text']) for d in dialogues], 'spoken dialogue lines missing/repeated or wrong speaker')
             for speaker in sorted({d['speaker'] for d in dialogues}):
                 for marker in re.finditer(re.escape(speaker) + r'[^\n：:]{0,12}(?:说|问|答|补充|对白|台词|独白)[：:]\s*(?![“"「『‘])', text):
@@ -335,6 +436,8 @@ def submit(project, module, payload, context_receipt=None):
         require(not explicit or 'timing_nodes' in payload, 'explicit timing requires timing_nodes')
         if 'timing_nodes' in payload:
             timing_node_ranges(text, payload['timing_nodes'], delivery.get('duration'), explicit=explicit)
+        if staged:
+            check_department_copy(p, w, payload)
         executed = {r['module'] for r in w['results']}
         require(all(i['owner']=='compile' or i['owner'] in executed for i in w['plan']['coverage']), 'required module coverage not executed')
         p.setdefault('video_master_history', []).append(p.get('video_master_prompt', ''))
@@ -378,14 +481,27 @@ def submit(project, module, payload, context_receipt=None):
                     'grid requires nine distinct observation descriptions')
             p['panels'] = panels
     elif module == 'validate':
-        require(set(payload) == {'content_checked', 'evidence', 'limitations','coverage','requirement_reviews'}, 'validation fields not allowed')
+        fields = {'content_checked', 'evidence', 'limitations', 'coverage', 'requirement_reviews'}
+        dual = task['mode'] == 'prompt' and task.get('delivery', {}).get('outputs') == 'dual'
+        require(set(payload) == fields | ({'direct_coverage'} if dual else set())
+                | ({'camera_review'} if staged else set()), 'validation fields not allowed')
         require(payload['content_checked'] is True and isinstance(payload['evidence'], dict) and set(payload['evidence']) == ids and all(isinstance(v,str) and len(v.strip()) >= 8 for v in payload['evidence'].values()), 'content evidence required')
         require(isinstance(payload['limitations'], list), 'limitations must be list')
         text = p.get('video_master_prompt','') if task['mode'] not in ('grid','edit_grid') else '\n'.join(x['prompt'] for x in p.get('panels',[]))+'\n'+p.get('video_master_prompt','')
         if task['mode']=='workbench': text='\n'.join(r['payload'].get('record','') for r in w['results'])
+        if task['mode'] == 'prompt':
+            compiled = next(r['payload'] for r in w['results'] if r['module'] == 'compile')
+            text = compiled['text']
         verify_evidence(w['plan']['coverage'], payload['coverage'], text,
                         p.get('master_utterances', []) if task['mode'] == 'prompt' else [])
+        if dual:
+            try:
+                verify_evidence(w['plan']['coverage'], payload['direct_coverage'], compiled['model_ready_prompt'])
+            except ValueError as error:
+                raise ValueError('direct prompt evidence: ' + str(error)) from error
         verify_reviews(w['plan']['coverage'], payload['requirement_reviews'])
+        if staged:
+            light_deliver({**camera_card(p, w, compiled), 'review': payload['camera_review']})
         executed = {r['module'] for r in w['results']}
         require(all(i['owner'] in executed for i in w['plan']['coverage']), 'coverage owner not executed')
     elif module in ('workbench', 'maintenance'):
@@ -408,6 +524,8 @@ def repair(project, target, reason):
     require(target in modules and modules.index(target) < w['cursor'], 'repair target must be previously executed')
     require(w['repairs'] < 2, 'repair budget exhausted; report unresolved issue')
     index = modules.index(target)
+    if any(result['module'] == 'compile' for result in w['results'][index:]):
+        p.pop('model_ready_prompt', None)
     w['history'].append({'reason': reason, 'target': target, 'invalidated': w['results'][index:]})
     w['results'] = w['results'][:index]
     w['cursor'] = index
@@ -455,6 +573,30 @@ def load(path):
     return json.loads(Path(path).read_text(encoding='utf-8-sig'))
 
 
+def deliver(project):
+    """Return the exact compiled texts only after the current required phases passed."""
+    w = state(project)
+    modules = [step['module'] for step in w['plan']['steps']]
+    results = w['results']
+    require(w['plan']['task']['mode'] == 'prompt' and w['status'] == 'text_checked'
+            and w['cursor'] == len(modules) and [r['module'] for r in results] == modules
+            and results[-1]['payload'].get('content_checked') is True,
+            'delivery requires a checked prompt run; finish review or repair before delivery')
+    require_current_rules(project, w)
+    review_receipt = results[-1]['context_receipt']
+    require(review_receipt.get('upstream_hash') == fingerprint(results[:-1]),
+            'review inputs changed; check the exact final draft again')
+    compiled = results[modules.index('compile')]['payload']
+    if departmental(w['plan']['task']):
+        check_department_copy(project, w, compiled)
+        light_deliver({**camera_card(project, w, compiled), 'review': results[-1]['payload'].get('camera_review')})
+    result = {'production_master': compiled['text']}
+    if w['plan']['task'].get('delivery', {}).get('outputs') == 'dual':
+        require('direct_coverage' in results[-1]['payload'], 'direct prompt evidence must be checked before delivery')
+        result['model_ready_prompt'] = compiled['model_ready_prompt']
+    return result
+
+
 def episode(projects):
     """Assemble checked segment runs; never shorten or silently merge conflicting assets."""
     parts, prompts, common = [], {}, ''
@@ -463,9 +605,8 @@ def episode(projects):
         w = state(project)
         require(w['status'] == 'text_checked' and w['plan']['task'].get('delivery', {}).get('outputs') == 'dual',
                 'episode requires checked dual segment runs')
-        require_current_rules(project, w)
-        compiled = next(r['payload'] for r in w['results'] if r['module'] == 'compile')
-        master, direct = compiled['text'], compiled['model_ready_prompt']
+        checked = deliver(project)
+        master, direct = checked['production_master'], checked['model_ready_prompt']
         require(master.count(marker) == 1, 'expected exactly one template segment section per run')
         prefix, body = master.split(marker)
         sid = re.search(r'^【片段编号】[：:]\s*([^\s]+)[ \t]*$', body, re.M)
@@ -504,8 +645,11 @@ def main():
     import sys
     if hasattr(sys.stdout, 'reconfigure'):
         sys.stdout.reconfigure(encoding='utf-8')
+    if hasattr(sys.stderr, 'reconfigure'):
+        sys.stderr.reconfigure(encoding='utf-8')
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument('command', choices=['plan','context','init','submit','repair','discover','check','refresh-rules','workbench-json','episode'])
+    ap.add_argument('command', choices=['plan','context','init','submit','repair','discover','check','refresh-rules',
+                                        'workbench-json','episode','deliver','light-deliver','storyboard-plan'])
     ap.add_argument('input')
     ap.add_argument('extra', nargs='*')
     ap.add_argument('--project')
@@ -529,6 +673,12 @@ def main():
             require(args.out and not Path(args.out).exists(), 'refresh-rules needs a new --out file')
             result = refresh_rules(data)
         elif args.command == 'workbench-json': result = to_workbench(data)
+        elif args.command == 'deliver': result = deliver(data)
+        elif args.command == 'light-deliver':
+            result = light_deliver(data)
+            if set(result['outputs']) != {'storyboard'}:
+                raise DeliveryBlocked('source', 'full prompts must be released from a completed department run with deliver')
+        elif args.command == 'storyboard-plan': result = storyboard_plan(data)
         else:
             validate_project(data)
             result = {'structure': 'passed', 'semantic_and_media': 'not automatically verified'}
@@ -538,8 +688,15 @@ def main():
         if args.out:
             out = Path(args.out)
             require(out.resolve() != Path(args.input).resolve(), 'write a new version; do not overwrite input')
-            out.write_text(text + '\n', encoding='utf-8')
+            if args.command in ('deliver', 'light-deliver', 'episode', 'storyboard-plan'):
+                require(not out.exists(), 'delivery needs a new --out file; keep the previous confirmed version')
+                with out.open('x', encoding='utf-8') as file:
+                    file.write(text + '\n')
+            else:
+                out.write_text(text + '\n', encoding='utf-8')
         else: print(text)
+    except DeliveryBlocked as error:
+        ap.exit(2, json.dumps({'status':'blocked', 'return_to':error.return_to, 'reason':str(error)}, ensure_ascii=False)+'\n')
     except (ValueError, KeyError, IndexError, TypeError) as error:
         ap.exit(2, 'ERROR: ' + str(error) + '\n')
 

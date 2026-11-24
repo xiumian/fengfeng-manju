@@ -15,7 +15,8 @@ class DualDelivery(unittest.TestCase):
         cls.direct = (ex/'雨渡-SEG01直投.txt').read_text(encoding='utf-8')
         cls.marker = '━━━━━━━━━━ 片段设定 ━━━━━━━━━━'
 
-    def run_segment(self, master, direct, copy_format=None):
+    def run_segment(self, master, direct, copy_format=None, stop_before_review=False,
+                    direct_evidence=None):
         line = '别急，还没到呢。'
         speaker = '阿岚'
         body = f'{speaker}用扇托起水灯，对岸方窗亮起。'
@@ -42,8 +43,14 @@ class DualDelivery(unittest.TestCase):
                 if direct is not None:
                     payload['model_ready_prompt'] = direct
             elif m == 'validate':
+                if stop_before_review:
+                    return p
+                if direct_evidence is None:
+                    direct_evidence = {k: line if k.startswith('dialogue:') else '黑方窗里挑亮一星暖黄'
+                                       for k in evidence}
                 payload = {'content_checked':True,'evidence':{'E':'灯口转正，烛焰由蓝返黄'},'limitations':['仅文字'],
-                           'coverage':evidence,'requirement_reviews':{k:{'status':'met','reason':body} for k in evidence}}
+                           'coverage':evidence,'direct_coverage':direct_evidence,
+                           'requirement_reviews':{k:{'status':'met','reason':body} for k in evidence}}
             else:
                 payload = {'design':{'E':body}}
             p = w.submit(p,m,payload,c['receipt'])
@@ -83,3 +90,29 @@ class DualDelivery(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'shot audio block'):
             self.run_segment(self.master,compact)
         self.run_segment(self.master,compact,'compact')
+
+    def test_delivery_withheld_before_validation_and_after_rollback(self):
+        pending = self.run_segment(self.master, self.direct, stop_before_review=True)
+        with self.assertRaisesRegex(ValueError, 'checked'):
+            w.deliver(pending)
+        approved = self.run_segment(self.master, self.direct)
+        self.assertEqual(w.deliver(approved)['model_ready_prompt'], self.direct)
+        rewound = w.repair(approved, 'camera', '检查发现上一版没给听者反应留下可见时间')
+        self.assertNotIn('model_ready_prompt', rewound)
+        self.assertEqual([r['module'] for r in rewound['workflow']['results']],
+                         ['source', 'performance', 'sound'])
+        with self.assertRaisesRegex(ValueError, 'checked'):
+            w.deliver(rewound)
+        self.assertEqual(w.deliver(approved)['model_ready_prompt'], self.direct)
+
+    def test_master_only_quote_cannot_validate_direct_copy(self):
+        bad = self.direct.replace('黑方窗里挑亮一星暖黄', '窗稍亮')
+        with self.assertRaisesRegex(ValueError, 'direct.*evidence'):
+            self.run_segment(self.master, bad)
+
+    def test_review_receipt_is_bound_to_exact_checked_draft(self):
+        run = self.run_segment(self.master, self.direct)
+        compiled = next(r['payload'] for r in run['workflow']['results'] if r['module']=='compile')
+        compiled['model_ready_prompt'] = compiled['model_ready_prompt'].replace('黑方窗里挑亮一星暖黄', '窗稍亮')
+        with self.assertRaisesRegex(ValueError, 'review.*changed'):
+            w.deliver(run)

@@ -1,8 +1,8 @@
 {
   "package_name": "fengfeng manju",
-  "distribution_name": "新版 v9.0",
-  "version": "9.0.0",
-  "build_date": "2026-11-23",
+  "distribution_name": "全流程 v9.1.0",
+  "version": "9.1.0",
+  "build_date": "2026-11-24",
   "trigger": "$fengfeng-manju",
   "trigger_aliases": [
     "九宫",
@@ -16,7 +16,7 @@
   "default_project": null,
   "default_port": "dynamic-localhost",
   "segments": null,
-  "prompt_transform": "创作准备（按授权扩写或提取） → 完整事件底稿 → 任务路由 → 按需视听设计 → 编译 → 检查/定向返修 → 交付",
+  "prompt_transform": "剧本 → 场景资产 → 适用的动作／表演／特效 → 摄影 → 声音 → 编译 → 复核放行（问题退回责任工序）",
   "workbench_features": [
     "D1-D5项目配置",
     "九个不重复观察状态",

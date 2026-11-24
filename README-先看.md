@@ -1,4 +1,4 @@
-# fengfeng manju v8.2.3｜新版
+# 全流程 v9.1.0｜部门接力
 
 在 Codex 中调用 `$fengfeng-manju`，按任务调度工序。入口见 [SKILL.md](SKILL.md)，维护规则见 [维护制度](maintenance/change-control.md)，命令见 [工具接口](references/tool-interface.md)。
 
@@ -6,14 +6,18 @@
 
 ## 当前分支
 
-`新版` 是本次改后 skill 的分支预览；`release/v8.2.0` 保持不变。包含六项前置创作、动作与镜头节奏、情绪表情、128条特效与36条打斗方案、完整提示词模板及分层音效。保留可选段尾抽帧镜、主特效变化链、配乐主题线及关键因果逐项复核。v8.2.3 补强跨场剧情因果、切镜收益与观看时间，并加上对白景物插镜和长对白排镜方法；投喂模板及 8.2 数据合同不变。规则/交接测试不等于生成成片验收，上传也不等于本机安装。
+新模式在 `release/v9.1.0-handoff` 独立发布。原有分支和 v9.0 标签不被替换。
+
+完整提示词按「剧本 → 场景资产 → 适用的动作／表演／特效 → 摄影 → 声音 → 编译 → 复核」逐站交接。每站用上一站已接收的成果；出问题退回对应工序，只重跑受影响的下游。只要剧本或分镜时在对应交付点停止。
+
+完整投喂模板、每镜六项音效、六项专业导法和内置库保留。规则和文本检查不等于成片验收；拉取仓库也不等于更新本机安装。
 
 ## 跨电脑维护
 
 首次在另一台电脑克隆此版本。
 
 ```sh
-git clone --branch 新版 https://github.com/xiumian/fengfeng-manju.git
+git clone --branch release/v9.1.0-handoff https://github.com/xiumian/fengfeng-manju.git
 ```
 
 在仓库内先执行 `git pull --ff-only`，修改并测试后提交，再执行 `git push`。仓库更新后，需将新版技能安装到要使用它的 Codex 环境。

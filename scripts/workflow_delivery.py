@@ -35,28 +35,42 @@ def check_delivery(value):
 
 
 # Match a shot heading (not a bare time range used for dialogue).
-def shot_audio(text):
-    headings = []
+def shot_blocks(text):
     parts = []
     for line in text.splitlines():
         line = line.strip()
         if line.startswith('——') or SHOT_TIME.match(line):
-            headings.append(line)
-            parts.append([])
+            parts.append((line, []))
         elif parts:
-            parts[-1].append(line)
+            parts[-1][1].append(line)
+    return parts
+
+
+AUDIO_FIELDS = ('动作层','特效层','环境层','同步节点','主次变化','跨镜承接')
+
+
+def shot_audio_details(text):
+    parts = shot_blocks(text)
     if not parts:
         raise ValueError('full audio needs shot headings')
-    labels = ('动作层','特效层','环境层','同步节点','主次变化','跨镜承接')
-    for heading, lines in zip(headings, parts):
+    result = {}
+    for heading, lines in parts:
+        if heading in result:
+            raise ValueError('duplicate shot audio heading: '+heading)
         if lines.count('【音效】') != 1:
             raise ValueError(heading+' needs one shot audio block')
         body = lines[lines.index('【音效】')+1:]
-        for label in labels:
+        result[heading] = {}
+        for label in AUDIO_FIELDS:
             hits = [line for line in body if re.match('^'+label+r'\s*[：:]',line)]
             if len(hits) != 1 or not re.split('[：:]',hits[0],maxsplit=1)[1].strip():
                 raise ValueError(heading+' missing or duplicate audio field: '+label)
-    return headings
+            result[heading][label] = re.split('[：:]',hits[0],maxsplit=1)[1].strip()
+    return result
+
+
+def shot_audio(text):
+    return list(shot_audio_details(text))
 
 
 def check_direct(text, master, dialogues, copy_format='full'):

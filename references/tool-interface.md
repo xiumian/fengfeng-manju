@@ -1,8 +1,48 @@
 # 工具接口（8.2）
 
-新做整段提示词在task.delivery中指定outputs为dual；copy_format默认full，只有用户明确要精简才填compact。full按完整模板复制，每镜独立六项音效；相对时序也用独立的“——【镜头标题】”行分镜。compile同时提交text（制片主稿）与model_ready_prompt（本段直投稿）。旧任务未指定时沿用单主稿。显式时码的两稿使用相同timing_nodes标题。分集装订：episode命令读取按剧情排序的运行文件路径JSON数组（相对清单所在目录），例如 python scripts/workflow.py episode manifest.json --out episode.json。首段含完整共用页，后段可从模板片段设定分隔头开始；重复共用页必须一致，否则先解决设定冲突。产物production_master只含一份全集资产，model_ready_prompts按唯一片段编号取独立文本。局改后旧直投稿失效，按修改后的完整片段重新编译，不拿单事件补丁直接生成。
+双轨交付在task.delivery中指定outputs为dual；copy_format默认full，只有用户明确要精简才填compact。full按完整模板复制，每镜独立六项音效；相对时序也用独立的“——【镜头标题】”行分镜。双轨的compile同时提交text（制片主稿）与model_ready_prompt（本段直投稿），显式时码使用同一组timing_nodes标题。分集装订：episode命令读取按剧情排序的运行文件路径JSON数组（相对清单所在目录），例如 python scripts/workflow.py episode manifest.json --out episode.json。首段含完整共用页；共用页重复时须一致，装订后只保留一份全集资产，model_ready_prompts按唯一片段编号取独立文本。局改后旧直投稿失效，重新编译完整片段，不拿单事件补丁直接生成。
 
 Python 3，无第三方运行依赖。输入只读，--out写新版本，不能覆盖输入。语义识别、设计和复核由模型完成，程序不调用模型服务。
+
+## 单段交稿
+
+整段提示词只取一个片段，复用既有 `init/context/submit/repair/deliver`，不用开整集工程。总管准备 `segment.json`（来源和事件、原句、首尾及需求，按[项目合同](project-contract.md)）和 `task.json`（如 `{"mode":"prompt","handoff":"departments","delivery":{"duration":19,"timing":"explicit"}}`）。`reason` 短记本轮范围；默认一份完整稿，可以用 `delivery.outputs:"dual"` 同时产主稿和直投稿。片段已锁长时保留排期，用户明确要求不显示时码用 `relative`。每站的程序输入取自当前状态，不预写下一站稿。
+
+```text
+python scripts/workflow.py init segment.json task.json --out run-00.json
+python scripts/workflow.py context task.json source --project run-00.json --out source-in.json
+python scripts/workflow.py submit run-00.json source source-out.json --context source-in.json --out run-01.json
+python scripts/workflow.py deliver checked-run.json --out checked-text.json
+```
+
+按 `workflow.plan.steps` 重复中间两步，每次用上一站的新运行文件；未通过时不能取下一站的上下文。各站读取 `upstream` 的实际成果，不仅是状态名。交接字段沿用下文工程命令及以下补充：
+
+- 剧本部在常规源文映射之外交 `design`（事件 ID → 可拍因果与固定首尾）。资产、动作、表演、特效按同样的事件设计形状只交本专业的成果。
+- 摄影站先从当前上下文取 `camera_source` 原样与 `view_plan` 运行下节 `storyboard-plan`，再排 `design` 镜头列表。提交常规事件 `design`，另带 `camera_plan:{view_plan,plan_receipt,design}`。该回执绑定摄影的实际前序输入。新镜头未定前不打开声音站。
+- 声音站交常规事件 `design` 和 `shot_audio`：键是摄影已定的镜头标题，每镜值为六个单行字符串字段：动作层、特效层、环境层、同步节点、主次变化、跨镜承接。编译逐字承接已定的取景词组、运动与六项声音（仅授权精简直投有声音例外），不是再做一次设计。
+- 复核阶段在常规覆盖外提交 `camera_review`。以 `continuity` 核最后事件末态，并对照每个 `beat:<id>`、`shot:1` 等逐镜及 `cut:1` 等切口；已排到六秒的镜另核 `hold:<镜号>`，不是时长上限。每项有 `status:"met"`、实际理由和各份正文的 `evidence`。证据键为 `master`／`direct`，逐镜和末态填短引句；beat 内填 `{"shot:2":"关联镜画面引句"}`；cut 内填 `{"out":"上一镜末画面","in":"下一镜起画面"}`；hold 内填依次出现且不同的 `{"first":"早处画面","last":"后处画面"}`。声音栏不能替代画面。缺口填 `status:"unmet"`、`return_to`、`reason`；或直接走 `repair`，不交虚假证据。
+
+当前部门缺件时先补它；上游需改才 `repair`，保留之前已经通过的站和旧运行文件。只有 `deliver` 返回的指定正文可交，不附检查和接力记录。阻断时不生成交稿；不拿 `light-deliver` 的临时卡跳过接力。程序核结构、回执及真实引文，拍法收益仍由复核判断。历史旧档按原合同可读；本轮新完整提示词走部门接力。
+
+### 分镜版轻量交稿
+
+先建立只含 `source` 和 `view_plan` 的短交接。整段接力使用摄影上下文的 `camera_source` 作为 `source`。只交分镜时另建 `source`，包含 `scope`（授权范围）、`requirements`（已锁项ID到说明）、`outputs:["storyboard"]`、`dialogues`（按序原句）、`timing` 与已锁定的 `duration`。`view_plan` 按观众应看懂变化的顺序排列，每个关键看点只写 `id`（短英文或数字 ID）、`change`（变化）、`see`（必须看清）、`choice`（取景取舍和理由）。在逐镜起草前运行：
+
+```text
+python scripts/workflow.py storyboard-plan viewing-plan.json --out view-receipt.json
+```
+
+此步只核交接并返回看点 ID 和短回执，不输出镜头。带同一份 `view_plan` 和 `plan_receipt` 到摄影提交（独立分镜带原 `source` 到 `light-deliver`）。若稿没拍到，返工而不是悄改计划；回执不能代替导演的判断。
+
+两路线共用下列摄影交接。只交分镜时只放 `drafts.storyboard`，不用主稿、直投稿和提示词栏目；正文布局按用户要求：
+
+- `design` 每镜保留 `heading`（实际正文中唯一的镜头标题，显式秒数也写在这里）、`watch`（观看任务）、`beats`（此镜承担的计划 ID，可多项，非关键连接可空），以及引用本镜实际正文的 `focal`（焦段或视角）和 `framing`（机位与构图短句）。要检排期时，每镜加 `start`、`end`。已定总长即使用户不要可见时码，也保留内部排期。
+- `motion` 在本镜选一组：`{"fixed":"固定机位"}`，或 `{"trigger":"起动触发","path":"运动方向与路径","stop":"具体停止点"}`；右侧值须是本镜正文的具体引句，不能用景别代替。
+- 只交分镜的 `review`：先查每个 `beat:<id>`，证据用 `{"shot:2":"一处真实引句"}` 或多镜引句；须在关联镜头，后揭示的看点不能被提前拍明。再核锁点、逐镜和切口。锁点和镜头项证据键为 `storyboard`；切口用 `{"out":"上镜末的画面","in":"下镜起的画面"}`。漏拍、错序或不连贯用 `unmet` 加 `return_to` 和原因。不要求一看点一镜；单镜没有切口项。
+
+独立分镜用 `python scripts/workflow.py light-deliver handoff.json --out checked-board.json`，只从 `outputs.storyboard` 取通过的原稿。结构通过不代替对焦段取舍、台词余量、动作连贯和切镜收益的语义复查。
+
+## 工程命令
 
 ```text
 python scripts/workflow.py plan task.json --project project.json
